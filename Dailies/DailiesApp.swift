@@ -11,7 +11,7 @@ import SwiftUI
 struct DailiesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GamesGridView()
         }
     }
 }
