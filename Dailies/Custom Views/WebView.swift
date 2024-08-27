@@ -15,6 +15,7 @@ struct WebViewScreen: View {
         WebView(url: game.url)
             .navigationTitle(game.name)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .tabBar) 
     }
 }
 

@@ -24,13 +24,14 @@ struct GamesGridView: View {
                 LazyVGrid(columns: columns) {
                     ForEach(viewModel.allGames, id: \.self) { game in
                         NavigationLink(destination: WebViewScreen(game: game)) {
-                           GameGridItem(game: game)                               
+                           GameGridItem(game: game)                                   
                         }
+                        .padding(.bottom)
                     }
                 }
             }
-            .padding()
-            .navigationTitle("Games")
+            .padding([.trailing, .leading, .top], 12)            
+            .navigationTitle("All Games")
         }
     }
 }

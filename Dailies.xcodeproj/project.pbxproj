@@ -59,8 +59,8 @@
 		FA99A3A22C7CF91D00D382F5 /* Dailies */ = {
 			isa = PBXGroup;
 			children = (
-				FA99A3BD2C7D0DD900D382F5 /* Utilities */,
 				FA99A3A32C7CF91D00D382F5 /* DailiesApp.swift */,
+				FA99A3BD2C7D0DD900D382F5 /* Utilities */,
 				FA99A3BA2C7D0A1500D382F5 /* Screens */,
 				FA99A3BC2C7D0A4100D382F5 /* Custom Views */,
 				FA99A3B92C7D0A0B00D382F5 /* Models */,
