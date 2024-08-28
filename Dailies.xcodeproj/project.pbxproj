@@ -19,6 +19,7 @@
 		FA99A3C32C7F8C8C00D382F5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */; };
 		FA99A3C62C7F8EAD00D382F5 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */; };
 		FA99A3C82C7F8FCA00D382F5 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */; };
+		FA99A3CA2C7FB34900D382F5 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C92C7FB34900D382F5 /* String+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
+		FA99A3C92C7FB34900D382F5 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */,
+				FA99A3C92C7FB34900D382F5 /* String+Ext.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 				FA99A3C32C7F8C8C00D382F5 /* HomeView.swift in Sources */,
 				FA99A3B82C7D070400D382F5 /* GameGridItem.swift in Sources */,
 				FA99A3B42C7D05AE00D382F5 /* Game.swift in Sources */,
+				FA99A3CA2C7FB34900D382F5 /* String+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
