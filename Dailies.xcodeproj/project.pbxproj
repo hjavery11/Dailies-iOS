@@ -15,6 +15,10 @@
 		FA99A3B42C7D05AE00D382F5 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3B32C7D05AE00D382F5 /* Game.swift */; };
 		FA99A3B62C7D05C300D382F5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3B52C7D05C300D382F5 /* WebView.swift */; };
 		FA99A3B82C7D070400D382F5 /* GameGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3B72C7D070400D382F5 /* GameGridItem.swift */; };
+		FA99A3C12C7F848600D382F5 /* GameGridItem2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C02C7F848600D382F5 /* GameGridItem2.swift */; };
+		FA99A3C32C7F8C8C00D382F5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */; };
+		FA99A3C62C7F8EAD00D382F5 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */; };
+		FA99A3C82C7F8FCA00D382F5 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +31,10 @@
 		FA99A3B32C7D05AE00D382F5 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		FA99A3B52C7D05C300D382F5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		FA99A3B72C7D070400D382F5 /* GameGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGridItem.swift; sourceTree = "<group>"; };
+		FA99A3C02C7F848600D382F5 /* GameGridItem2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGridItem2.swift; sourceTree = "<group>"; };
+		FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +97,7 @@
 		FA99A3BA2C7D0A1500D382F5 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				FA99A3C42C7F8C9200D382F5 /* Home */,
 				FA99A3BB2C7D0A2900D382F5 /* GamesGrid */,
 			);
 			path = Screens;
@@ -97,8 +106,8 @@
 		FA99A3BB2C7D0A2900D382F5 /* GamesGrid */ = {
 			isa = PBXGroup;
 			children = (
-				FA99A3B12C7D055300D382F5 /* GamesGridVM.swift */,
 				FA99A3A52C7CF91D00D382F5 /* GamesGridView.swift */,
+				FA99A3B12C7D055300D382F5 /* GamesGridVM.swift */,
 			);
 			path = GamesGrid;
 			sourceTree = "<group>";
@@ -108,6 +117,7 @@
 			children = (
 				FA99A3B52C7D05C300D382F5 /* WebView.swift */,
 				FA99A3B72C7D070400D382F5 /* GameGridItem.swift */,
+				FA99A3C02C7F848600D382F5 /* GameGridItem2.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -115,8 +125,18 @@
 		FA99A3BD2C7D0DD900D382F5 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		FA99A3C42C7F8C9200D382F5 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */,
+				FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,10 +209,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA99A3C62C7F8EAD00D382F5 /* UserManager.swift in Sources */,
+				FA99A3C82C7F8FCA00D382F5 /* HomeVM.swift in Sources */,
 				FA99A3A62C7CF91D00D382F5 /* GamesGridView.swift in Sources */,
 				FA99A3B62C7D05C300D382F5 /* WebView.swift in Sources */,
 				FA99A3A42C7CF91D00D382F5 /* DailiesApp.swift in Sources */,
 				FA99A3B22C7D055300D382F5 /* GamesGridVM.swift in Sources */,
+				FA99A3C12C7F848600D382F5 /* GameGridItem2.swift in Sources */,
+				FA99A3C32C7F8C8C00D382F5 /* HomeView.swift in Sources */,
 				FA99A3B82C7D070400D382F5 /* GameGridItem.swift in Sources */,
 				FA99A3B42C7D05AE00D382F5 /* Game.swift in Sources */,
 			);

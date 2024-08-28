@@ -9,13 +9,32 @@ import WebKit
 import SwiftUI
 
 struct WebViewScreen: View {
-    let game: Game
+    let games: [Game]
+    @State private var currentIndex: Int
+    
+    init(games: [Game], currentIndex: Int) {
+        self.games = games
+        self._currentIndex = State(initialValue: currentIndex)
+    }
     
     var body: some View {
-        WebView(url: game.url)
-            .navigationTitle(game.name)
+        WebView(url: games[currentIndex].url)
+            .navigationTitle(games[currentIndex].name)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .tabBar) 
+            .toolbar(.hidden, for: .tabBar)
+            .toolbar {
+                if games.count > 1 {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Next") {
+                            goToNextGame()
+                        }
+                    }
+                }
+            }
+    }
+    
+    private func goToNextGame() {
+        currentIndex += 1
     }
 }
 
@@ -36,7 +55,7 @@ struct WebView: UIViewRepresentable {
     func updateUIView(_ uiView: WKWebView, context: Context) {
         guard let url = URL(string: url) else { return }
         
-        webview.load(URLRequest(url: url))
+        uiView.load(URLRequest(url: url))
     }
     
 }

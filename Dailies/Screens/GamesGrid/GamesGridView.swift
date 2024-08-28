@@ -23,8 +23,8 @@ struct GamesGridView: View {
             ScrollView {
                 LazyVGrid(columns: columns) {
                     ForEach(viewModel.allGames, id: \.self) { game in
-                        NavigationLink(destination: WebViewScreen(game: game)) {
-                           GameGridItem(game: game)                                   
+                        NavigationLink(destination: WebViewScreen(games: [game], currentIndex: 0)) {
+                            GameGridItem2(game: game, size: .large, completed: false)
                         }
                         .padding(.bottom)
                     }

@@ -17,6 +17,9 @@ struct Game: Hashable {
 }
 
 struct GameData {
+    
+    static let shared = GameData()
+    
     let games = [
         Game(name: "Pokedoku",
              url: "https://pokedoku.com",
@@ -50,19 +53,19 @@ struct GameData {
         
         Game(name: "Box Office Game",
              url: "https://boxofficega.me",
-             description: "Guess the box office revenue of movies",
+             description: "Guess the movies from a specific box office week",
              category: "movies",
              background: "boxoffice-bg"),
         
         Game(name: "Costcodle",
              url: "https://costcodle.com",
-             description: "Guess items found at Costco",
+             description: "Guess the cost of Costco items",
              category: "retail",
              background: "costcodle-bg"),
         
         Game(name: "Movie to Movie",
              url: "https://movietomovie.com",
-             description: "Connect actors between movies",
+             description: "Connect two movies using actors",
              category: "movies",
              background: "movietomovie-bg"),
         
@@ -80,19 +83,19 @@ struct GameData {
         
         Game(name: "Travle",
              url: "https://travle.earth",
-             description: "Guess the travel destination",
+             description: "Guess the travel destination between two countries",
              category: "travel",
              background: "travle-bg"),
         
         Game(name: "Puckdoku",
              url: "https://puckdoku.com",
-             description: "Hockey-themed puzzle game",
+             description: "Complete the Hockey-themed grid",
              category: "sports",
              background: "puckdoku-bg"),
         
         Game(name: "Movie Grid",
              url: "https://moviegrid.io",
-             description: "Complete the movie-related grid",
+             description: "Complete the movie-themed grid",
              category: "movies",
              background: "moviegrid-bg"),
         
@@ -110,7 +113,7 @@ struct GameData {
         
         Game(name: "Acted",
              url: "https://acted.wtf",
-             description: "Guess the actor based on clues",
+             description: "Guess the movie based on actors",
              category: "movies",
              background: "acted-bg"),
         
@@ -122,13 +125,13 @@ struct GameData {
         
         Game(name: "Relatle",
              url: "https://relatle.io",
-             description: "Guess the related word",
+             description: "Navigate from one artist to another",
              category: "words",
              background: "relatle-bg"),
         
         Game(name: "Disorderly",
              url: "https://playdisorderly.com",
-             description: "Solve puzzles with disorderly words",
+             description: "Sort the answers in the correct order",
              category: "puzzle",
              background: "disorderly-bg"),
         
@@ -138,5 +141,13 @@ struct GameData {
              category: "music",
              background: "bandle-bg")
     ]
+    
+    var gamesByName: [String: Game] {
+        Dictionary(uniqueKeysWithValues: games.map { ($0.name, $0) })
+    }
+    
+    func getGame(forName name: String) -> Game? {
+        gamesByName[name]
+    }
 
 }
