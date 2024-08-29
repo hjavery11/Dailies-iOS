@@ -124,10 +124,12 @@ struct WebView: UIViewRepresentable {
                     print("finsihed puzzle success")
                 }
             } else if message.name == "puzzleFailed" {
-                parent.game.completed = true
-                parent.game.won = false
-                UserManager.shared.completeGame(parent.game, win: false)
-                print("finsihed puzzle failed")
+                if !parent.game.completed {
+                    parent.game.completed = true
+                    parent.game.won = false
+                    UserManager.shared.completeGame(parent.game, win: false)
+                    print("finsihed puzzle failed")
+                }
             }
         }
         

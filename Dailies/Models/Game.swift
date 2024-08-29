@@ -261,6 +261,39 @@ struct GameData {
     checkPuzzleStatus(observer);
 })();
 """
+        case "bandle":
+            return """
+(function() {
+    // Function to check for the win or loss messages
+    function checkGameEnded() {
+        const victoryText = document.body.textContent || "";
+        const lossText = document.body.textContent || "";
+
+        if (victoryText.includes("You got it!")) {
+            // Game won, send puzzleFinished message
+            window.webkit.messageHandlers.puzzleFinished.postMessage(true);
+        } else if (lossText.includes("Better luck tomorrow!")) {
+            // Game lost, send puzzleFailed message
+            window.webkit.messageHandlers.puzzleFailed.postMessage(false);
+        }
+    }
+
+    // Use MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(function(mutationsList, observer) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'childList' || mutation.type === 'subtree' || mutation.type === 'characterData') {
+                checkGameEnded(); // Check if the game has ended
+            }
+        }
+    });
+
+    // Start observing the entire document for changes
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+
+    // Initial check in case the text is already present
+    checkGameEnded();
+})();
+"""
         default:
             return nil
             
