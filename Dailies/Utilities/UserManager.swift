@@ -32,6 +32,20 @@ class UserManager {
         }
     }
     
+    func addDailyGame(_ game: Game) {
+        var games = getDailyGames()
+        games.append(game)
+        
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(games)
+            UserDefaults.standard.setValue(data, forKey: Keys.dailies.rawValue)
+            print("set data to \(games)")
+        } catch {
+            print("Error during encoding of updated games")
+        }
+    }
+        
     func getDailyGames() -> [Game] {
         let decoder =  JSONDecoder()
         if let savedData = UserDefaults.standard.data(forKey: Keys.dailies.rawValue) {

@@ -11,6 +11,7 @@ import Combine
 class HomeVM: ObservableObject {
   
     @Published var dailyGames: [Game]
+    @Published var showGamesList: Bool = false
     
     init() {
         dailyGames = UserManager.shared.getDailyGames()

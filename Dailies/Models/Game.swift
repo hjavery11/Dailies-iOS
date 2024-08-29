@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Game: Hashable, Codable {
+struct Game: Hashable, Codable {    
     let name: String
     let url: String
     let description: String
@@ -17,9 +17,7 @@ struct Game: Hashable, Codable {
     var won: Bool? = nil
 }
 
-struct GameData {
-    
-    static let shared = GameData()
+struct GameData {   
     
     let games = [
         Game(name: "Pokedoku",

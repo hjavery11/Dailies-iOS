@@ -103,7 +103,7 @@ struct WebView: UIViewRepresentable {
             print("Navigation did finish")
             
             //Inject JS for determining puzzle completion
-            if let gameJS = GameData.shared.getJavascript(forGame: parent.game.name) {
+            if let gameJS = GameData().getJavascript(forGame: parent.game.name) {
                 print("added javascript to page for completion of game: \(parent.game.name)")
                 webView.evaluateJavaScript(gameJS) { result, error in
                     if let error = error {

@@ -20,6 +20,7 @@
 		FA99A3C62C7F8EAD00D382F5 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */; };
 		FA99A3C82C7F8FCA00D382F5 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */; };
 		FA99A3CA2C7FB34900D382F5 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C92C7FB34900D382F5 /* String+Ext.swift */; };
+		FA99A3CE2C7FFC9E00D382F5 /* GameListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3CD2C7FFC9E00D382F5 /* GameListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 		FA99A3C92C7FB34900D382F5 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		FA99A3CD2C7FFC9E00D382F5 /* GameListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				FA99A3B52C7D05C300D382F5 /* WebView.swift */,
 				FA99A3B72C7D070400D382F5 /* GameGridItem.swift */,
 				FA99A3C02C7F848600D382F5 /* GameGridItem2.swift */,
+				FA99A3CD2C7FFC9E00D382F5 /* GameListView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			files = (
 				FA99A3C62C7F8EAD00D382F5 /* UserManager.swift in Sources */,
 				FA99A3C82C7F8FCA00D382F5 /* HomeVM.swift in Sources */,
+				FA99A3CE2C7FFC9E00D382F5 /* GameListView.swift in Sources */,
 				FA99A3A62C7CF91D00D382F5 /* GamesGridView.swift in Sources */,
 				FA99A3B62C7D05C300D382F5 /* WebView.swift in Sources */,
 				FA99A3A42C7CF91D00D382F5 /* DailiesApp.swift in Sources */,
