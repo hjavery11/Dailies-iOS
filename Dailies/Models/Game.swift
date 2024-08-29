@@ -14,6 +14,7 @@ struct Game: Hashable, Codable {
     let category: String
     let background: String?
     var completed: Bool = false
+    var won: Bool? = nil
 }
 
 struct GameData {
@@ -156,14 +157,79 @@ struct GameData {
             return "acted JS"
         case "framed":
             return """
+            (function() {
+                let timeoutId;
+
+                // Function to check for specific text content for success or failure
+                function checkPuzzleStatus(observer) {
+                    // Only look for text outside the input field (search bar)
+                    const elements = document.querySelectorAll('p, div:not(.relative), span');  // Exclude the input container
+                    elements.forEach(element => {
+                        if (element.textContent.includes('You got it!')) {
+                            // Notify the native code that the puzzle is completed successfully
+                            window.webkit.messageHandlers.puzzleFinished.postMessage(true);
+                            
+                            // Disconnect the MutationObserver to stop further checks
+                            observer.disconnect();
+                        } else if (element.textContent.includes('THE ANSWER WAS')) {
+                            // Notify the native code that the puzzle failed
+                            window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+                            
+                            // Disconnect the MutationObserver to stop further checks
+                            observer.disconnect();
+                        }
+                    });
+                }
+
+                // Throttled mutation handler
+                function throttledMutationHandler(mutationsList, observer) {
+                    if (timeoutId) {
+                        clearTimeout(timeoutId);
+                    }
+
+                    // Throttle the DOM checks to avoid impacting performance
+                    timeoutId = setTimeout(() => {
+                        checkPuzzleStatus(observer);
+                    }, 200); // Delay in milliseconds, adjust as needed
+                }
+
+                // Use MutationObserver to watch for changes in the DOM outside the input field
+                const observer = new MutationObserver(throttledMutationHandler);
+
+                // Start observing the body but exclude changes in the form containing the search bar
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true,
+                    characterData: true,
+                    attributes: false
+                });
+
+                // Initial check in case the text is already present
+                checkPuzzleStatus(observer);
+            })();
+            """
+        case "pokedoku":
+            return """
 (function() {
-    // Function to check for the specific text content "You got it!"
-    function checkPuzzleCompleted(observer) {
-        const elements = document.querySelectorAll('p, div, span');
-        elements.forEach(element => {
-            if (element.textContent.includes('You got it!')) {
-                // Notify the native code that the puzzle is completed
+    let lastInvocationTime = 0;
+    const throttleDelay = 200; // 200 ms throttle delay
+
+    // Function to check for success or failure within the targeted modal areas
+    function checkPuzzleStatus(observer) {
+        const modalSections = document.querySelectorAll('section.chakra-modal__content');
+        
+        modalSections.forEach(section => {
+            const textContent = section.textContent;
+
+            if (textContent.includes('Congrats! You solved them all!')) {
+                // Notify the native code that the puzzle is completed successfully
                 window.webkit.messageHandlers.puzzleFinished.postMessage(true);
+                
+                // Disconnect the MutationObserver to stop further checks
+                observer.disconnect();
+            } else if (textContent.includes('You have run out of guesses')) {
+                // Notify the native code that the puzzle failed
+                window.webkit.messageHandlers.puzzleFailed.postMessage(true);
                 
                 // Disconnect the MutationObserver to stop further checks
                 observer.disconnect();
@@ -171,20 +237,30 @@ struct GameData {
         });
     }
 
-    // Use MutationObserver to watch for changes in the DOM
-    const observer = new MutationObserver(function(mutationsList, observer) {
-        for (let mutation of mutationsList) {
-            if (mutation.type === 'childList' || mutation.type === 'subtree' || mutation.type === 'characterData') {
-                checkPuzzleCompleted(observer); // Pass the observer to disconnect it when puzzle is completed
-            }
+    // Throttled mutation handler
+    function throttledMutationHandler(mutationsList, observer) {
+        const now = Date.now();
+
+        // Check if sufficient time has passed since the last invocation
+        if (now - lastInvocationTime > throttleDelay) {
+            checkPuzzleStatus(observer);
+            lastInvocationTime = now;
         }
+    }
+
+    // Use MutationObserver to watch for changes in the DOM specifically within the modal sections
+    const observer = new MutationObserver(throttledMutationHandler);
+
+    // Start observing the body but target only modal sections for changes
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: false
     });
 
-    // Start observing the entire document for changes
-    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-
     // Initial check in case the text is already present
-    checkPuzzleCompleted(observer);
+    checkPuzzleStatus(observer);
 })();
 """
         default:

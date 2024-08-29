@@ -12,6 +12,12 @@ struct DailiesApp: App {
     
     init() {
         UserManager.shared.setDailyGames()
+        
+        if UserManager.shared.shouldResetDailyGames() {
+            UserManager.shared.resetDailyGames()
+        }
+        
+        UserManager.shared.scheduleDailyReset()
     }
     
     var body: some Scene {

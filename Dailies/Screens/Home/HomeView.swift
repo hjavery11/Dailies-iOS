@@ -27,8 +27,8 @@ struct HomeView: View {
                                         }
                                     }
                                     if (game.completed) {
-                                        Image(systemName: "checkmark")
-                                            .foregroundStyle(Color(.systemGreen))
+                                        Image(systemName: game.won ?? true ?  "checkmark" : "xmark")
+                                            .foregroundStyle(game.won ?? true ? Color(.systemGreen) : Color(.systemRed))
                                             .fontWeight(.semibold)
                                             .font(.title)
                                             .background(Color.clear)

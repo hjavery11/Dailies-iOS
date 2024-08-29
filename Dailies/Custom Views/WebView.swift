@@ -72,8 +72,9 @@ struct WebView: UIViewRepresentable {
         // Register the script message handler to listen for the `loadingFinished` message
         let contentController = wkwebView.configuration.userContentController
         contentController.add(context.coordinator, name: "puzzleFinished")
+        contentController.add(context.coordinator, name: "puzzleFailed")
         
-        print("Added message handlers for puzzle completion")
+        print("Added message handlers for puzzle completion and failure")
         
         wkwebView.load(URLRequest(url:url))
         return wkwebView
@@ -118,9 +119,15 @@ struct WebView: UIViewRepresentable {
             if message.name == "puzzleFinished"  {
                 if !parent.game.completed {
                     parent.game.completed = true
-                    UserManager.shared.completeGame(parent.game)
-                    print("finsihed puzzle")
+                    parent.game.won = true
+                    UserManager.shared.completeGame(parent.game, win: true)
+                    print("finsihed puzzle success")
                 }
+            } else if message.name == "puzzleFailed" {
+                parent.game.completed = true
+                parent.game.won = false
+                UserManager.shared.completeGame(parent.game, win: false)
+                print("finsihed puzzle failed")
             }
         }
         
