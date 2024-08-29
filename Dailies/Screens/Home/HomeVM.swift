@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
+import Combine
 
 class HomeVM: ObservableObject {
-    
-    @Published var dailyGames: [String: Bool]?
+  
+    @Published var dailyGames: [Game]
     
     init() {
-        if let userGames = UserManager.shared.getDailyGames() {
-            self.dailyGames = userGames
-        }
-    }   
+        dailyGames = UserManager.shared.getDailyGames()
+        print("init homeVM with daily games of: \(dailyGames)")
+    }
     
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class GamesGridVM {
-    let allGames = GameData().games
+class GamesGridVM: ObservableObject {
+    @Published var allGames = GameData().games
     let squareSize: CGFloat = 100
 }

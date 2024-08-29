@@ -9,19 +9,19 @@ import WebKit
 import SwiftUI
 
 struct WebViewScreen: View {
-    let games: [Game]
+    @Binding var games: [Game]
     @State private var currentIndex: Int
-    @State private var isLoading = false
     
-    init(games: [Game], currentIndex: Int) {
-        self.games = games
+    init(games: Binding<[Game]>, currentIndex: Int) {
+        self._games = games
         self._currentIndex = State(initialValue: currentIndex)
     }
     
     var body: some View {
         if let url = URL(string: games[currentIndex].url) {
             ZStack {
-                WebView(url: url, isLoading: $isLoading)
+                WebView(url: url, game: $games[currentIndex])
+                    .id(url)
                     .navigationTitle(games[currentIndex].name)
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar(.hidden, for: .tabBar)
@@ -29,6 +29,7 @@ struct WebViewScreen: View {
                         if games.count > 1 {
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button {
+                                    print("next game")
                                     goToNextGame()
                                 } label: {
                                     HStack {
@@ -41,10 +42,6 @@ struct WebViewScreen: View {
                             }
                         }
                     }
-                if isLoading {
-                    ProgressView()
-                        .controlSize(.large)
-                }
             }
         }
     }
@@ -62,7 +59,7 @@ struct WebViewScreen: View {
 struct WebView: UIViewRepresentable {
     
     var url: URL
-    @Binding var isLoading: Bool
+    @Binding var game: Game
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -74,7 +71,9 @@ struct WebView: UIViewRepresentable {
         
         // Register the script message handler to listen for the `loadingFinished` message
         let contentController = wkwebView.configuration.userContentController
-        contentController.add(context.coordinator, name: "loadingFinished")
+        contentController.add(context.coordinator, name: "puzzleFinished")
+        
+        print("Added message handlers for puzzle completion")
         
         wkwebView.load(URLRequest(url:url))
         return wkwebView
@@ -92,50 +91,49 @@ struct WebView: UIViewRepresentable {
         init(_ parent: WebView) {
             self.parent = parent
         }
+        
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-            parent.isLoading = true
-            print("is loading true")
-            let js = """
-                (function() {
-                    if (document.readyState === 'interactive' || document.readyState === 'complete') {
-                        window.webkit.messageHandlers.loadingFinished.postMessage(true);
-                    } else {
-                        document.addEventListener('readystatechange', function() {
-                            if (document.readyState === 'interactive' || document.readyState === 'complete') {
-                                window.webkit.messageHandlers.loadingFinished.postMessage(true);
-                            }
-                        });
-                    }
-                })();
-                """
-            webView.evaluateJavaScript(js) { result, error in
-                if let error = error {
-                    print("JavaScript evaluation error: \(error)")
-                } else {
-                    print("JavaScript injected successfully")
-                }
-            }
+            //finish loading logic can go here eventually
         }
+        
         
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             // You can still use this method for any final tasks after the page has fully loaded
             print("Navigation did finish")
+            
+            //Inject JS for determining puzzle completion
+            if let gameJS = GameData.shared.getJavascript(forGame: parent.game.name) {
+                print("added javascript to page for completion of game: \(parent.game.name)")
+                webView.evaluateJavaScript(gameJS) { result, error in
+                    if let error = error {
+                        print("JavaScript evaluation error: \(error)")
+                    } else {
+                        print("JavaScript injected successfully for game")
+                    }
+                }
+            }
         }
         
-        // Handle JavaScript messages
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            if message.name == "loadingFinished" {
-                parent.isLoading = false
-                print("is loading false")
+            if message.name == "puzzleFinished"  {
+                if !parent.game.completed {
+                    parent.game.completed = true
+                    UserManager.shared.completeGame(parent.game)
+                    print("finsihed puzzle")
+                }
             }
         }
         
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-            parent.isLoading = false
-            print("Loading failed, setting isLoading to false")
+            print("Navigation failed: \(error.localizedDescription)")
         }
+        
         
         
     }
     
+    
+    
 }
+
+

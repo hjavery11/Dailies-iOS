@@ -12,7 +12,7 @@ let gridItemHeight: CGFloat = 130
 
 struct GamesGridView: View {
     
-    let viewModel = GamesGridVM()
+    @StateObject private var viewModel = GamesGridVM()
    
     var body: some View {
         let columns = [
@@ -23,7 +23,7 @@ struct GamesGridView: View {
             ScrollView {
                 LazyVGrid(columns: columns) {
                     ForEach(viewModel.allGames, id: \.self) { game in
-                        NavigationLink(destination: WebViewScreen(games: [game], currentIndex: 0)) {
+                        NavigationLink(destination: WebViewScreen(games: $viewModel.allGames, currentIndex: viewModel.allGames.firstIndex(of: game) ?? 0)){
                             GameGridItem2(game: game, size: .large, completed: false)
                         }
                         .padding(.bottom)

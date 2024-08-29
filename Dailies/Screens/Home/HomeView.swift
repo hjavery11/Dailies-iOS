@@ -16,20 +16,17 @@ struct HomeView: View {
             GridItem(.adaptive(minimum: 100))
         ]
         
-        if let dailyGames = viewModel.dailyGames {
-            let gamesList = dailyGames.keys.compactMap { GameData.shared.getGame(forName: $0) }
-            
             NavigationStack {
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(Array(gamesList.enumerated()), id: \.element.name) { index, game in
+                        LazyVGrid(columns: columns, spacing: 16) {
+                            ForEach(Array(viewModel.dailyGames.enumerated()), id: \.element) { index, game in
                                 ZStack {
                                     HStack {
-                                        NavigationLink(destination: WebViewScreen(games: gamesList, currentIndex: index)) {
-                                            GameGridItem2(game: game, size: .small, completed: dailyGames[game.name] ?? false)
+                                        NavigationLink(destination: WebViewScreen(games: $viewModel.dailyGames, currentIndex: index)) {
+                                            GameGridItem2(game: game, size: .small, completed: game.completed)
                                         }
                                     }
-                                    if dailyGames[game.name] == true {
+                                    if (game.completed) {
                                         Image(systemName: "checkmark")
                                             .foregroundStyle(Color(.systemGreen))
                                             .fontWeight(.semibold)
@@ -37,14 +34,17 @@ struct HomeView: View {
                                             .background(Color.clear)
                                     }
                                 }
+                            }
+                            .navigationTitle("Daily Games")
                         }
-                        .navigationTitle("Daily Games")
+                        .padding()
                     }
-                    .padding()
-                }
-            }
         }
+            .onAppear {
+                viewModel.dailyGames = UserManager.shared.getDailyGames()
+            }
     }
+        
 }
 
 #Preview {

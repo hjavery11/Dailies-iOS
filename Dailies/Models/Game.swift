@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct Game: Hashable {
+struct Game: Hashable, Codable {
     let name: String
     let url: String
     let description: String
     let category: String
     let background: String?
-  
+    var completed: Bool = false
 }
 
 struct GameData {
@@ -148,6 +148,49 @@ struct GameData {
     
     func getGame(forName name: String) -> Game? {
         gamesByName[name]
+    }
+    
+    func getJavascript(forGame name: String) -> String? {
+        switch name.lowercased() {
+        case "acted":
+            return "acted JS"
+        case "framed":
+            return """
+(function() {
+    // Function to check for the specific text content "You got it!"
+    function checkPuzzleCompleted(observer) {
+        const elements = document.querySelectorAll('p, div, span');
+        elements.forEach(element => {
+            if (element.textContent.includes('You got it!')) {
+                // Notify the native code that the puzzle is completed
+                window.webkit.messageHandlers.puzzleFinished.postMessage(true);
+                
+                // Disconnect the MutationObserver to stop further checks
+                observer.disconnect();
+            }
+        });
+    }
+
+    // Use MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(function(mutationsList, observer) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'childList' || mutation.type === 'subtree' || mutation.type === 'characterData') {
+                checkPuzzleCompleted(observer); // Pass the observer to disconnect it when puzzle is completed
+            }
+        }
+    });
+
+    // Start observing the entire document for changes
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+
+    // Initial check in case the text is already present
+    checkPuzzleCompleted(observer);
+})();
+"""
+        default:
+            return nil
+            
+        }
     }
 
 }
