@@ -11,32 +11,30 @@
 		FA99A3A62C7CF91D00D382F5 /* GamesGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3A52C7CF91D00D382F5 /* GamesGridView.swift */; };
 		FA99A3A82C7CF91D00D382F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA99A3A72C7CF91D00D382F5 /* Assets.xcassets */; };
 		FA99A3AB2C7CF91D00D382F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA99A3AA2C7CF91D00D382F5 /* Preview Assets.xcassets */; };
-		FA99A3B22C7D055300D382F5 /* GamesGridVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3B12C7D055300D382F5 /* GamesGridVM.swift */; };
 		FA99A3B42C7D05AE00D382F5 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3B32C7D05AE00D382F5 /* Game.swift */; };
 		FA99A3B62C7D05C300D382F5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3B52C7D05C300D382F5 /* WebView.swift */; };
 		FA99A3B82C7D070400D382F5 /* GameGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3B72C7D070400D382F5 /* GameGridItem.swift */; };
 		FA99A3C12C7F848600D382F5 /* GameGridItem2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C02C7F848600D382F5 /* GameGridItem2.swift */; };
 		FA99A3C32C7F8C8C00D382F5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */; };
 		FA99A3C62C7F8EAD00D382F5 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */; };
-		FA99A3C82C7F8FCA00D382F5 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */; };
+		FA99A3C82C7F8FCA00D382F5 /* GamesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C72C7F8FCA00D382F5 /* GamesVM.swift */; };
 		FA99A3CA2C7FB34900D382F5 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3C92C7FB34900D382F5 /* String+Ext.swift */; };
 		FA99A3CE2C7FFC9E00D382F5 /* GameListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA99A3CD2C7FFC9E00D382F5 /* GameListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FA99A3A02C7CF91D00D382F5 /* Dailies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dailies.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA99A3A02C7CF91D00D382F5 /* Gamedles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gamedles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA99A3A32C7CF91D00D382F5 /* DailiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailiesApp.swift; sourceTree = "<group>"; };
 		FA99A3A52C7CF91D00D382F5 /* GamesGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesGridView.swift; sourceTree = "<group>"; };
 		FA99A3A72C7CF91D00D382F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA99A3AA2C7CF91D00D382F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		FA99A3B12C7D055300D382F5 /* GamesGridVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesGridVM.swift; sourceTree = "<group>"; };
 		FA99A3B32C7D05AE00D382F5 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		FA99A3B52C7D05C300D382F5 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		FA99A3B72C7D070400D382F5 /* GameGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGridItem.swift; sourceTree = "<group>"; };
 		FA99A3C02C7F848600D382F5 /* GameGridItem2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGridItem2.swift; sourceTree = "<group>"; };
 		FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		FA99A3C52C7F8EAD00D382F5 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
-		FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
+		FA99A3C72C7F8FCA00D382F5 /* GamesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesVM.swift; sourceTree = "<group>"; };
 		FA99A3C92C7FB34900D382F5 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		FA99A3CD2C7FFC9E00D382F5 /* GameListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,7 +53,7 @@
 		FA99A3972C7CF91D00D382F5 = {
 			isa = PBXGroup;
 			children = (
-				FA99A3A22C7CF91D00D382F5 /* Dailies */,
+				FA99A3A22C7CF91D00D382F5 /* Gamedles */,
 				FA99A3A12C7CF91D00D382F5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,15 +61,16 @@
 		FA99A3A12C7CF91D00D382F5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FA99A3A02C7CF91D00D382F5 /* Dailies.app */,
+				FA99A3A02C7CF91D00D382F5 /* Gamedles.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FA99A3A22C7CF91D00D382F5 /* Dailies */ = {
+		FA99A3A22C7CF91D00D382F5 /* Gamedles */ = {
 			isa = PBXGroup;
 			children = (
 				FA99A3A32C7CF91D00D382F5 /* DailiesApp.swift */,
+				FAA9F8872C811B730055FC33 /* View Models */,
 				FA99A3BD2C7D0DD900D382F5 /* Utilities */,
 				FA99A3BA2C7D0A1500D382F5 /* Screens */,
 				FA99A3BC2C7D0A4100D382F5 /* Custom Views */,
@@ -79,7 +78,7 @@
 				FA99A3A72C7CF91D00D382F5 /* Assets.xcassets */,
 				FA99A3A92C7CF91D00D382F5 /* Preview Content */,
 			);
-			path = Dailies;
+			path = Gamedles;
 			sourceTree = "<group>";
 		};
 		FA99A3A92C7CF91D00D382F5 /* Preview Content */ = {
@@ -111,7 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				FA99A3A52C7CF91D00D382F5 /* GamesGridView.swift */,
-				FA99A3B12C7D055300D382F5 /* GamesGridVM.swift */,
 			);
 			path = GamesGrid;
 			sourceTree = "<group>";
@@ -140,17 +138,24 @@
 			isa = PBXGroup;
 			children = (
 				FA99A3C22C7F8C8C00D382F5 /* HomeView.swift */,
-				FA99A3C72C7F8FCA00D382F5 /* HomeVM.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		FAA9F8872C811B730055FC33 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA99A3C72C7F8FCA00D382F5 /* GamesVM.swift */,
+			);
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FA99A39F2C7CF91D00D382F5 /* Dailies */ = {
+		FA99A39F2C7CF91D00D382F5 /* Gamedles */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FA99A3AE2C7CF91D00D382F5 /* Build configuration list for PBXNativeTarget "Dailies" */;
+			buildConfigurationList = FA99A3AE2C7CF91D00D382F5 /* Build configuration list for PBXNativeTarget "Gamedles" */;
 			buildPhases = (
 				FA99A39C2C7CF91D00D382F5 /* Sources */,
 				FA99A39D2C7CF91D00D382F5 /* Frameworks */,
@@ -160,9 +165,9 @@
 			);
 			dependencies = (
 			);
-			name = Dailies;
+			name = Gamedles;
 			productName = Dailies;
-			productReference = FA99A3A02C7CF91D00D382F5 /* Dailies.app */;
+			productReference = FA99A3A02C7CF91D00D382F5 /* Gamedles.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -180,7 +185,7 @@
 					};
 				};
 			};
-			buildConfigurationList = FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Dailies" */;
+			buildConfigurationList = FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Gamedles" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -193,7 +198,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FA99A39F2C7CF91D00D382F5 /* Dailies */,
+				FA99A39F2C7CF91D00D382F5 /* Gamedles */,
 			);
 		};
 /* End PBXProject section */
@@ -216,12 +221,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA99A3C62C7F8EAD00D382F5 /* UserManager.swift in Sources */,
-				FA99A3C82C7F8FCA00D382F5 /* HomeVM.swift in Sources */,
+				FA99A3C82C7F8FCA00D382F5 /* GamesVM.swift in Sources */,
 				FA99A3CE2C7FFC9E00D382F5 /* GameListView.swift in Sources */,
 				FA99A3A62C7CF91D00D382F5 /* GamesGridView.swift in Sources */,
 				FA99A3B62C7D05C300D382F5 /* WebView.swift in Sources */,
 				FA99A3A42C7CF91D00D382F5 /* DailiesApp.swift in Sources */,
-				FA99A3B22C7D055300D382F5 /* GamesGridVM.swift in Sources */,
 				FA99A3C12C7F848600D382F5 /* GameGridItem2.swift in Sources */,
 				FA99A3C32C7F8C8C00D382F5 /* HomeView.swift in Sources */,
 				FA99A3B82C7D070400D382F5 /* GameGridItem.swift in Sources */,
@@ -285,7 +289,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -342,7 +346,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -359,10 +363,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Dailies/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Gamedles/Preview Content\"";
 				DEVELOPMENT_TEAM = 6P3ZM853J8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Dayleez;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -375,7 +380,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HEJ.Dailies;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Gamedles;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -393,10 +398,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Dailies/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Gamedles/Preview Content\"";
 				DEVELOPMENT_TEAM = 6P3ZM853J8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Dayleez;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -409,7 +415,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HEJ.Dailies;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Gamedles;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -423,7 +429,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Dailies" */ = {
+		FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Gamedles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FA99A3AC2C7CF91D00D382F5 /* Debug */,
@@ -432,7 +438,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FA99A3AE2C7CF91D00D382F5 /* Build configuration list for PBXNativeTarget "Dailies" */ = {
+		FA99A3AE2C7CF91D00D382F5 /* Build configuration list for PBXNativeTarget "Gamedles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FA99A3AF2C7CF91D00D382F5 /* Debug */,

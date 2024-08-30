@@ -12,26 +12,31 @@ let gridItemHeight: CGFloat = 130
 
 struct GamesGridView: View {
     
-    @StateObject private var viewModel = GamesGridVM()
-   
+    @StateObject private var viewModel = GamesVM()
+    @EnvironmentObject var userManager: UserManager
+    
     var body: some View {
         let columns = [
             GridItem(.adaptive(minimum: gridItemWidth))
         ]
-
+        
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns) {
-                    ForEach(viewModel.allGames, id: \.self) { game in
-                        NavigationLink(destination: WebViewScreen(games: $viewModel.allGames, currentIndex: viewModel.allGames.firstIndex(of: game) ?? 0)){
+                    ForEach(userManager.games.indices, id:\.self) { index in
+                        let game = userManager.games[index]
+                        NavigationLink(value: index) {
                             GameGridItem2(game: game, size: .large, completed: false)
                         }
                         .padding(.bottom)
                     }
                 }
+                .padding([.trailing, .leading, .top], 12)
+                .navigationTitle("All Games")
             }
-            .padding([.trailing, .leading, .top], 12)            
-            .navigationTitle("All Games")
+            .navigationDestination(for: Int.self) { index in
+                WebViewScreen(index: index)
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Game: Hashable, Codable {    
+struct Game: Hashable, Codable, Identifiable {
     let name: String
     let url: String
     let description: String
@@ -15,10 +15,12 @@ struct Game: Hashable, Codable {
     let background: String?
     var completed: Bool = false
     var won: Bool? = nil
+    var isDailyGame: Bool = false
+    
+    var id: String { name }
 }
 
-struct GameData {   
-    
+struct GameData {       
     let games = [
         Game(name: "Pokedoku",
              url: "https://pokedoku.com",
@@ -165,7 +167,7 @@ struct GameData {
                     elements.forEach(element => {
                         if (element.textContent.includes('You got it!')) {
                             // Notify the native code that the puzzle is completed successfully
-                            window.webkit.messageHandlers.puzzleFinished.postMessage(true);
+                            window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
                             
                             // Disconnect the MutationObserver to stop further checks
                             observer.disconnect();
@@ -221,7 +223,7 @@ struct GameData {
 
             if (textContent.includes('Congrats! You solved them all!')) {
                 // Notify the native code that the puzzle is completed successfully
-                window.webkit.messageHandlers.puzzleFinished.postMessage(true);
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
                 
                 // Disconnect the MutationObserver to stop further checks
                 observer.disconnect();
@@ -270,8 +272,8 @@ struct GameData {
         const lossText = document.body.textContent || "";
 
         if (victoryText.includes("You got it!")) {
-            // Game won, send puzzleFinished message
-            window.webkit.messageHandlers.puzzleFinished.postMessage(true);
+            // Game won, send puzzleCompleted message
+            window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
         } else if (lossText.includes("Better luck tomorrow!")) {
             // Game lost, send puzzleFailed message
             window.webkit.messageHandlers.puzzleFailed.postMessage(false);

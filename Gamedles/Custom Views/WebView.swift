@@ -9,79 +9,68 @@ import WebKit
 import SwiftUI
 
 struct WebViewScreen: View {
-    @Binding var games: [Game]
-    @State private var currentIndex: Int
-    
-    init(games: Binding<[Game]>, currentIndex: Int) {
-        self._games = games
-        self._currentIndex = State(initialValue: currentIndex)
-    }
+    @State var index: Int
+    @EnvironmentObject var userManager: UserManager
     
     var body: some View {
-        if let url = URL(string: games[currentIndex].url) {
+        let game = userManager.games[index]
+        if let url = URL(string: game.url) {
             ZStack {
-                WebView(url: url, game: $games[currentIndex])
+                WebView(game: game, url: url)
                     .id(url)
-                    .navigationTitle(games[currentIndex].name)
+                    .navigationTitle(game.name)
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar(.hidden, for: .tabBar)
                     .toolbar {
-                        if games.count > 1 {
-                            ToolbarItem(placement: .topBarTrailing) {
-                                Button {
-                                    print("next game")
-                                    goToNextGame()
-                                } label: {
-                                    HStack {
-                                        Text("Next")
-                                        Image(systemName: "chevron.right")
-                                            .font(.callout)
-                                            .fontWeight(.semibold)
-                                    }
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                               print("next game")
+                            } label: {
+                                HStack {
+                                    Text("Next")
+                                    Image(systemName: "chevron.right")
+                                        .font(.callout)
+                                        .fontWeight(.semibold)
                                 }
                             }
                         }
+                        
                     }
             }
         }
     }
     
-    private func goToNextGame() {
-        currentIndex += 1
-        if currentIndex > games.count - 1 {
-            //go back to first game
-            currentIndex = 0
-        }
-        
-    }
 }
 
 struct WebView: UIViewRepresentable {
     
+    var game: Game
     var url: URL
-    @Binding var game: Game
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
     
     func makeUIView(context: Context) -> WKWebView {
+        print("webview makeUIView")
         let wkwebView = WKWebView()
         wkwebView.navigationDelegate = context.coordinator
         
         // Register the script message handler to listen for the `loadingFinished` message
         let contentController = wkwebView.configuration.userContentController
-        contentController.add(context.coordinator, name: "puzzleFinished")
+        contentController.add(context.coordinator, name: "puzzleCompleted")
         contentController.add(context.coordinator, name: "puzzleFailed")
         
         print("Added message handlers for puzzle completion and failure")
         
-        wkwebView.load(URLRequest(url:url))
+        wkwebView.load(URLRequest(url: url))
+        
         return wkwebView
     }
     
     func updateUIView(_ uiView: WKWebView, context: Context) {
         //only load url if its a new url
+        print("webview - updateUIView")
         if uiView.url?.absoluteString.trimmingTrailingSlash() != url.absoluteString.trimmingTrailingSlash() {
             uiView.load(URLRequest(url: url))
         }
@@ -95,12 +84,13 @@ struct WebView: UIViewRepresentable {
         
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
             //finish loading logic can go here eventually
+            print("webview - didStartProvisionalNavigation")
         }
         
         
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             // You can still use this method for any final tasks after the page has fully loaded
-            print("Navigation did finish")
+            print("webview - Navigation did finish")
             
             //Inject JS for determining puzzle completion
             if let gameJS = GameData().getJavascript(forGame: parent.game.name) {
@@ -116,21 +106,21 @@ struct WebView: UIViewRepresentable {
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            if message.name == "puzzleFinished"  {
-                if !parent.game.completed {
-                    parent.game.completed = true
-                    parent.game.won = true
-                    UserManager.shared.completeGame(parent.game, win: true)
-                    print("finsihed puzzle success")
-                }
-            } else if message.name == "puzzleFailed" {
-                if !parent.game.completed {
-                    parent.game.completed = true
-                    parent.game.won = false
-                    UserManager.shared.completeGame(parent.game, win: false)
-                    print("finsihed puzzle failed")
-                }
-            }
+//            if message.name == "puzzleCompleted"  {
+//                if !parent.game.completed {
+//                    parent.game.completed = true
+//                    parent.viewModel.currentGame.won = true
+//                    UserManager.shared.completeGame(parent.game, win: true)
+//                    print("finished puzzle success")
+//                }
+//            } else if message.name == "puzzleFailed" {
+//                if !parent.viewModel.currentGame.completed {
+//                    //                    parent.game.completed = true
+//                    //                    parent.game.won = false
+//                    //                    UserManager.shared.completeGame(parent.game, win: false)
+//                    print("finished puzzle failed")
+//                }
+//            }
         }
         
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

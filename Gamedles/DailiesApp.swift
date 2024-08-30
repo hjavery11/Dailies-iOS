@@ -9,16 +9,7 @@ import SwiftUI
 
 @main
 struct DailiesApp: App {
-    
-    init() {
-        UserManager.shared.setDailyGames()
-        
-        if UserManager.shared.shouldResetDailyGames() {
-            UserManager.shared.resetDailyGames()
-        }
-        
-        UserManager.shared.scheduleDailyReset()
-    }
+    @StateObject var userManager = UserManager()
     
     var body: some Scene {
         WindowGroup {
@@ -32,9 +23,8 @@ struct DailiesApp: App {
                     .tabItem {
                         Label("Games", systemImage: "square.grid.3x3")
                     }
-                
-               
             }
+            .environmentObject(userManager)
         }
     }
 }
