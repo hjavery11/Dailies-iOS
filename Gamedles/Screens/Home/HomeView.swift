@@ -35,22 +35,14 @@ struct HomeView: View {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(userManager.games.filter({ $0.isDailyGame }).indices, id:\.self) { index in
                             let game = userManager.games.filter({ $0.isDailyGame })[index]
-                            let _ = print("index of \(index) is game \(game) for daily only")
                             if game.isDailyGame {
                                 ZStack {
                                     HStack {
                                         NavigationLink(value: index) {
-                                            GameGridItem2(game: game, size: .small, completed: game.completed)
+                                            GameGridItem2(game: game, size: .small, showCompleted: true, forceCompleted: false)
                                         }
                                     }
-                                    
-                                    if (game.completed) {
-                                        Image(systemName: game.won ?? true ?  "checkmark" : "xmark")
-                                            .foregroundStyle(game.won ?? true ? Color(.systemGreen) : Color(.systemRed))
-                                            .fontWeight(.semibold)
-                                            .font(.title)
-                                            .background(Color.clear)
-                                    }
+                                   
                                 }
                             }
                         }

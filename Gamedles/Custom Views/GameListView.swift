@@ -23,7 +23,7 @@ struct GameListView: View {
                         let game = userManager.games[index]
                         //marking it as completed: true makes the checkmark appear which is what we want to happen, so just using that property eventhough its not technically its original intent
                         let selected = game.isDailyGame
-                        GameGridItem2(game: game, size: .large, completed: selected)
+                        GameGridItem2(game: game, size: .large, showCompleted: true, forceCompleted: selected)
                             .padding(.bottom)
                             .onTapGesture {
                                 userManager.games[index].isDailyGame.toggle()
