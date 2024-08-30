@@ -17,7 +17,6 @@ struct GameGridItem2: View {
     let size: Size
     
     let showCompleted: Bool
-    let forceCompleted: Bool
     
     var side: CGFloat {
         switch size {
@@ -51,7 +50,7 @@ struct GameGridItem2: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color(.tertiaryLabel), lineWidth: 1)
                
-            if ((game.completed && showCompleted) || forceCompleted) {
+            if (game.completed && showCompleted) {
                 Image(systemName: game.won ?? true ?  "checkmark" : "xmark")
                     .foregroundStyle(game.won ?? true ? Color(.systemGreen) : Color(.systemRed))
                     .fontWeight(.semibold)
@@ -63,7 +62,7 @@ struct GameGridItem2: View {
                 Image(game.background ?? "placeholder-bg")
                     .resizable()
                     .mask(RoundedCornerMask(corners: [.topLeft, .topRight], radius: 8))
-                    .opacity((showCompleted && game.completed) || forceCompleted ? 0.3:1)
+                    .opacity((showCompleted && game.completed) ? 0.3:1)
                 
                
                

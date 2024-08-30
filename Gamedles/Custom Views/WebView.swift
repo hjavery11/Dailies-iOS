@@ -16,7 +16,6 @@ struct WebViewScreen: View {
     var body: some View {
         var game: Game {
             if dailiesOnly {
-                print(index)
                 return userManager.games.filter( { $0.isDailyGame })[index]
             } else {
                 return userManager.games[index]
@@ -65,7 +64,7 @@ struct WebViewScreen: View {
 }
 
 struct WebView: UIViewRepresentable {
-    
+    @EnvironmentObject var userManager: UserManager
     var game: Game
     var url: URL
     
@@ -128,21 +127,21 @@ struct WebView: UIViewRepresentable {
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            //            if message.name == "puzzleCompleted"  {
-            //                if !parent.game.completed {
-            //                    parent.game.completed = true
-            //                    parent.viewModel.currentGame.won = true
-            //                    UserManager.shared.completeGame(parent.game, win: true)
-            //                    print("finished puzzle success")
-            //                }
-            //            } else if message.name == "puzzleFailed" {
-            //                if !parent.viewModel.currentGame.completed {
-            //                    //                    parent.game.completed = true
-            //                    //                    parent.game.won = false
-            //                    //                    UserManager.shared.completeGame(parent.game, win: false)
-            //                    print("finished puzzle failed")
-            //                }
-            //            }
+            guard let index = parent.userManager.games.firstIndex(where: {$0 == parent.game}) else {
+                print("could not find the matching game to mark as completed in games list")
+                return
+            }
+            if message.name == "puzzleCompleted"  {
+                if !parent.userManager.games[index].completed {
+                    print("received puzzle success")
+                    parent.userManager.games[index].completed = true
+                    parent.userManager.games[index].won = true
+                }
+            } else if message.name == "puzzleFailed" {
+                print("received puzzle failed")
+                parent.userManager.games[index].completed = true
+                parent.userManager.games[index].won = false
+            }
         }
         
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

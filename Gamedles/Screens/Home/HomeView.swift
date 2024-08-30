@@ -39,7 +39,7 @@ struct HomeView: View {
                                 ZStack {
                                     HStack {
                                         NavigationLink(value: index) {
-                                            GameGridItem2(game: game, size: .small, showCompleted: true, forceCompleted: false)
+                                            GameGridItem2(game: game, size: .small, showCompleted: true)
                                         }
                                     }
                                    

@@ -21,13 +21,24 @@ struct GameListView: View {
                 LazyVGrid(columns: columns) {
                     ForEach(userManager.games.indices, id:\.self) { index in
                         let game = userManager.games[index]
-                        //marking it as completed: true makes the checkmark appear which is what we want to happen, so just using that property eventhough its not technically its original intent
-                        let selected = game.isDailyGame
-                        GameGridItem2(game: game, size: .large, showCompleted: true, forceCompleted: selected)
-                            .padding(.bottom)
-                            .onTapGesture {
-                                userManager.games[index].isDailyGame.toggle()
+                        ZStack {
+                           
+                            
+                            GameGridItem2(game: game, size: .large, showCompleted: false)
+                                .padding(.bottom)
+                                .opacity(game.isDailyGame ? 0.5:1)
+                                .onTapGesture {
+                                    userManager.games[index].isDailyGame.toggle()
+                                }
+                            
+                            if game.isDailyGame {
+                                Image(systemName: "checkmark" )
+                                    .foregroundStyle(Color(.systemGreen))
+                                    .fontWeight(.semibold)
+                                    .font(.title)
+                                    .background(Color.clear)
                             }
+                        }
                     }
                 }
                 .navigationTitle("Choose Games")
