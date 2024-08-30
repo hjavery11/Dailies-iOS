@@ -33,8 +33,9 @@ struct HomeView: View {
                 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(userManager.games.indices, id:\.self) { index in
-                            let game = userManager.games[index]
+                        ForEach(userManager.games.filter({ $0.isDailyGame }).indices, id:\.self) { index in
+                            let game = userManager.games.filter({ $0.isDailyGame })[index]
+                            let _ = print("index of \(index) is game \(game) for daily only")
                             if game.isDailyGame {
                                 ZStack {
                                     HStack {
@@ -58,12 +59,12 @@ struct HomeView: View {
                 }
             }
             .navigationDestination(for: Int.self) { index in
-                WebViewScreen(index: index)
+                WebViewScreen(index: index, dailiesOnly: true)
             }
             .navigationTitle("Daily Games")            
         }
         .fullScreenCover(isPresented: $showGamesList) {
-            //GameListView(viewModel: viewModel)
+            GameListView()
         }
        
     }

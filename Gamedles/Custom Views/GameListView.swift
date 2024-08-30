@@ -19,9 +19,15 @@ struct GameListView: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns) {
-                    ForEach(userManager.games) { game in
-                        GameGridItem2(game: game, size: .large, completed: false)
+                    ForEach(userManager.games.indices, id:\.self) { index in
+                        let game = userManager.games[index]
+                        //marking it as completed: true makes the checkmark appear which is what we want to happen, so just using that property eventhough its not technically its original intent
+                        let selected = game.isDailyGame
+                        GameGridItem2(game: game, size: .large, completed: selected)
                             .padding(.bottom)
+                            .onTapGesture {
+                                userManager.games[index].isDailyGame.toggle()
+                            }
                     }
                 }
                 .navigationTitle("Choose Games")
@@ -29,14 +35,8 @@ struct GameListView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(.visible, for: .navigationBar)
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Back") {
-                            dismiss()
-                        }
-                    }
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Done") {
-                            confirmDailyGames()
+                        Button("Done") {                  
                             dismiss()
                         }
                     }

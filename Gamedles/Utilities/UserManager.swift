@@ -45,9 +45,13 @@ class UserManager: ObservableObject {
             }
         } else {
             var initialGames: [Game] = GameData().games
-            for i in 0..<6 { // for testing only to save first 6 as daily games when we dont have onboarding
-                initialGames[i].isDailyGame = true
-            }
+            initialGames[0].isDailyGame = true
+            initialGames[2].isDailyGame = true
+            initialGames[9].isDailyGame = true
+            initialGames[5].isDailyGame = true
+            initialGames[18].isDailyGame = true
+            initialGames[8].isDailyGame = true
+            
             return initialGames
         }
         print("returning empty array for daily games. Shouldnt happen, needs investigation")

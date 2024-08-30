@@ -35,7 +35,7 @@ struct GamesGridView: View {
                 .navigationTitle("All Games")
             }
             .navigationDestination(for: Int.self) { index in
-                WebViewScreen(index: index)
+                WebViewScreen(index: index, dailiesOnly: false)
             }
         }
     }

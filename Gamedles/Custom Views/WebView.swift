@@ -11,9 +11,18 @@ import SwiftUI
 struct WebViewScreen: View {
     @State var index: Int
     @EnvironmentObject var userManager: UserManager
+    var dailiesOnly: Bool
     
     var body: some View {
-        let game = userManager.games[index]
+        var game: Game {
+            if dailiesOnly {
+                print(index)
+                return userManager.games.filter( { $0.isDailyGame })[index]
+            } else {
+                return userManager.games[index]
+            }
+        }
+        
         if let url = URL(string: game.url) {
             ZStack {
                 WebView(game: game, url: url)
@@ -24,7 +33,20 @@ struct WebViewScreen: View {
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             Button {
-                               print("next game")
+                                if dailiesOnly {
+                                    if index + 1 >= userManager.games.filter({$0.isDailyGame}).count {
+                                        index = 0
+                                    } else {
+                                        index += 1
+                                    }
+                                } else {
+                                    if index + 1 >= userManager.games.count {
+                                        index = 0
+                                    } else {
+                                        index += 1
+                                    }
+                                }
+                                
                             } label: {
                                 HStack {
                                     Text("Next")
@@ -106,21 +128,21 @@ struct WebView: UIViewRepresentable {
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-//            if message.name == "puzzleCompleted"  {
-//                if !parent.game.completed {
-//                    parent.game.completed = true
-//                    parent.viewModel.currentGame.won = true
-//                    UserManager.shared.completeGame(parent.game, win: true)
-//                    print("finished puzzle success")
-//                }
-//            } else if message.name == "puzzleFailed" {
-//                if !parent.viewModel.currentGame.completed {
-//                    //                    parent.game.completed = true
-//                    //                    parent.game.won = false
-//                    //                    UserManager.shared.completeGame(parent.game, win: false)
-//                    print("finished puzzle failed")
-//                }
-//            }
+            //            if message.name == "puzzleCompleted"  {
+            //                if !parent.game.completed {
+            //                    parent.game.completed = true
+            //                    parent.viewModel.currentGame.won = true
+            //                    UserManager.shared.completeGame(parent.game, win: true)
+            //                    print("finished puzzle success")
+            //                }
+            //            } else if message.name == "puzzleFailed" {
+            //                if !parent.viewModel.currentGame.completed {
+            //                    //                    parent.game.completed = true
+            //                    //                    parent.game.won = false
+            //                    //                    UserManager.shared.completeGame(parent.game, win: false)
+            //                    print("finished puzzle failed")
+            //                }
+            //            }
         }
         
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
