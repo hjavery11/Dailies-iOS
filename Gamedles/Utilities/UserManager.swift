@@ -45,12 +45,9 @@ class UserManager: ObservableObject {
             }
         } else {
             var initialGames: [Game] = GameData().games
-            initialGames[0].isDailyGame = true
-            initialGames[2].isDailyGame = true
-            initialGames[9].isDailyGame = true
-            initialGames[5].isDailyGame = true
-            initialGames[18].isDailyGame = true
-            initialGames[8].isDailyGame = true
+            for i in initialGames.indices {
+                initialGames[i].isDailyGame = true
+            }
             
             return initialGames
         }

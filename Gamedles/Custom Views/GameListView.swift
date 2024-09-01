@@ -15,15 +15,15 @@ struct GameListView: View {
         let columns = [
             GridItem(.adaptive(minimum: 150))
         ]
+        // Create a sorted list of tuples containing the original index and the game
+        let sortedGames = userManager.games.enumerated().sorted { $0.element.name < $1.element.name }
         
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns) {
-                    ForEach(userManager.games.indices, id:\.self) { index in
+                    ForEach(sortedGames, id: \.offset) { index, game in
                         let game = userManager.games[index]
                         ZStack {
-                           
-                            
                             GameGridItem2(game: game, size: .large, showCompleted: false)
                                 .padding(.bottom)
                                 .opacity(game.isDailyGame ? 0.5:1)

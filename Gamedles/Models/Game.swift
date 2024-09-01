@@ -154,7 +154,55 @@ struct GameData {
     func getJavascript(forGame name: String) -> String? {
         switch name.lowercased() {
         case "acted":
-            return "acted JS"
+            return """
+(function() {
+    function checkPuzzleOutcome() {
+        // Check if the text "The answer was:" is on the page
+        const answerText = document.body.textContent.includes('The answer was:');
+        
+        if (answerText) {
+            // Select all <p> elements on the page
+            const elements = document.querySelectorAll('p');
+            
+            // Check if any of these elements contain the green square (🟩)
+            let hasGreenSquare = false;
+            for (let element of elements) {
+                if (element.textContent.includes('🟩')) {
+                    hasGreenSquare = true;
+                    break;
+                }
+            }
+            
+            // Send the appropriate message based on the presence of the green square
+            if (hasGreenSquare) {
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+            } else {
+                window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+            }
+            return true; // Stop further checks once the outcome is determined
+        }
+        
+        return false; // The puzzle is not yet complete
+    }
+
+    // Check immediately on load
+    if (!checkPuzzleOutcome()) {
+        // If not complete, create a MutationObserver to monitor changes in the DOM
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (checkPuzzleOutcome()) {
+                observer.disconnect(); // Stop observing once the outcome is determined
+            }
+        });
+
+        // Start observing the entire document for changes in child elements, subtree, and attributes
+        observer.observe(document.body, {
+            childList: true,   // Monitor changes to child elements
+            subtree: true,     // Monitor the entire subtree
+            characterData: true // Also observe text changes
+        });
+    }
+})();
+"""
         case "framed":
             return """
             (function() {
@@ -337,7 +385,46 @@ struct GameData {
     }
 })();
 """
+        case "globle":
+            return """
+(function() {
+    function checkForMysteryCountry() {
+        // Select all <p> elements on the page
+        const elements = document.querySelectorAll('p');
+        
+        // Iterate through the elements to find the text "The Mystery Country is"
+        for (let element of elements) {
+            const textContent = element.textContent.trim();
+            
+            if (textContent.includes('The Mystery Country is')) {
+                console.log('The Mystery Country is found.');
+                // Send a message back to the app
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                return true; // Stop further checks once the text is found
+            }
+        }
+        
+        return false; // The text is not found yet
+    }
 
+    // Check immediately on load
+    if (!checkForMysteryCountry()) {
+        // If not complete, create a MutationObserver to monitor changes in the DOM
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (checkForMysteryCountry()) {
+                observer.disconnect(); // Stop observing once the text is found
+            }
+        });
+
+        // Start observing the entire document for changes in child elements, subtree, and attributes
+        observer.observe(document.body, {
+            childList: true,   // Monitor changes to child elements
+            subtree: true,     // Monitor the entire subtree
+            characterData: true // Also observe text changes
+        });
+    }
+})();
+"""
         default:
             return nil
             
