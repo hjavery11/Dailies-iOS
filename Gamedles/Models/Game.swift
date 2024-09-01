@@ -506,6 +506,117 @@ struct GameData {
     }
 })();
 """
+        case "connections":
+            return """
+(function() {
+    function checkForOutcome() {
+        // Select the <h2> element with the specific data-testid attribute
+        const outcomeHeader = document.querySelector('h2[data-testid="conn-congrats__title"]');
+
+        if (outcomeHeader) {
+            const textContent = outcomeHeader.textContent.trim();
+
+            if (textContent === 'Next Time!') {
+                // Send a message back to the app for a loss
+                window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+            } else {
+                // Send a message back to the app for a win
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+            }
+            return true; // Outcome determined
+        }
+        
+        return false; // Outcome is not yet determined
+    }
+
+    // Check immediately on load
+    if (!checkForOutcome()) {
+        // If not complete, create a MutationObserver to monitor changes in the DOM
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (checkForOutcome()) {
+                observer.disconnect(); // Stop observing once the outcome is detected
+            }
+        });
+
+        // Start observing the entire document for changes in child elements, subtree, and attributes
+        observer.observe(document.body, {
+            childList: true,   // Monitor changes to child elements
+            subtree: true,     // Monitor the entire subtree
+            characterData: true // Also observe text changes
+        });
+    }
+})();
+"""
+        case "disorderly":
+            return """
+(function() {
+    function checkForAnswer() {
+        // Select all <div> elements on the page
+        const divs = document.querySelectorAll('div');
+
+        // Iterate through the divs to find the text "You got the answer"
+        for (let div of divs) {
+            const textContent = div.textContent.trim();
+
+            if (textContent.includes('You got the answer')) {
+                // Send a message back to the app for a win
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                return true; // Stop further checks once the text is found
+            }
+        }
+        
+        return false; // The text is not found yet
+    }
+
+    // Check immediately on load
+    if (!checkForAnswer()) {
+        // If not found, create a MutationObserver to monitor changes in the DOM
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (checkForAnswer()) {
+                observer.disconnect(); // Stop observing once the text is detected
+            }
+        });
+
+        // Start observing the entire document for changes in child elements, subtree, and attributes
+        observer.observe(document.body, {
+            childList: true,   // Monitor changes to child elements
+            subtree: true,     // Monitor the entire subtree
+            characterData: true // Also observe text changes
+        });
+    }
+})();
+"""
+        case "food guessr":
+            return """
+(function() {
+    let lastUrl = window.location.href;
+
+    function checkForFinalScoreButton() {
+        const buttons = document.querySelectorAll('button');
+        const button = Array.from(buttons).find(btn => btn.textContent.trim() === 'Final Score');
+        
+        if (button) {
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+            }
+        }
+    }
+
+    function detectUrlChange() {
+        const currentUrl = window.location.href;
+        if (currentUrl !== lastUrl) {
+            lastUrl = currentUrl;
+            if (currentUrl.includes('foodguessr.com/round-results')) {
+                checkForFinalScoreButton();
+            }
+        }
+    }
+
+    // Periodically check for URL changes
+    setInterval(detectUrlChange, 500);
+
+})();
+"""
         default:
             return nil
             

@@ -79,8 +79,14 @@ struct WebView: UIViewRepresentable {
         
         // Register the script message handler to listen for the `loadingFinished` message
         let contentController = wkwebView.configuration.userContentController
-        contentController.add(context.coordinator, name: "puzzleCompleted")
-        contentController.add(context.coordinator, name: "puzzleFailed")
+        if let gameJS = GameData().getJavascript(forGame: game.name) {
+            let script = WKUserScript(source: gameJS, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+            contentController.add(context.coordinator, name: "puzzleCompleted")
+            contentController.add(context.coordinator, name: "puzzleFailed")
+            contentController.addUserScript(script)
+            print("added javascript to page for completion of game: \(game.name)")
+        }
+       
         
         print("Added message handlers for puzzle completion and failure")
         
@@ -93,7 +99,7 @@ struct WebView: UIViewRepresentable {
         //only load url if its a new url
         print("webview - updateUIView")
         if uiView.url?.absoluteString.trimmingTrailingSlash() != url.absoluteString.trimmingTrailingSlash() {
-            uiView.load(URLRequest(url: url))
+            //uiView.load(URLRequest(url: url))
         }
     }
     
@@ -114,29 +120,21 @@ struct WebView: UIViewRepresentable {
             print("webview - Navigation did finish")
             
             //Inject JS for determining puzzle completion
-            if let gameJS = GameData().getJavascript(forGame: parent.game.name) {
-                print("added javascript to page for completion of game: \(parent.game.name)")
-                webView.evaluateJavaScript(gameJS) { result, error in
-                    if let error = error {
-                        print("JavaScript evaluation error: \(error)")
-                    } else {
-                        print("JavaScript injected successfully for game")
-                    }
-                }
-            }
+           
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             guard let index = parent.userManager.games.firstIndex(where: {$0 == parent.game}) else {
-                print("could not find the matching game to mark as completed in games list")
                 return
             }
+            
             if message.name == "puzzleCompleted"  {
                 if !parent.userManager.games[index].completed {
                     print("received puzzle success")
                     parent.userManager.games[index].completed = true
                     parent.userManager.games[index].won = true
                 }
+            
             } else if message.name == "puzzleFailed" {
                 print("received puzzle failed")
                 parent.userManager.games[index].completed = true
