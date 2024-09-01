@@ -41,6 +41,7 @@ struct GameListView: View {
                         }
                     }
                 }
+                
                 .navigationTitle("Choose Games")
                 .padding([.trailing, .leading, .top], 12)
                 .navigationBarTitleDisplayMode(.inline)

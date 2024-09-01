@@ -296,6 +296,48 @@ struct GameData {
     checkGameEnded();
 })();
 """
+        case "daily dozen trivia":
+            return """
+(function() {
+    function checkGameCompletion() {
+        // Select all buttons on the page
+        const buttons = document.querySelectorAll('button');
+        
+        // Iterate through the buttons to find one with the text "view results"
+        for (let button of buttons) {
+            // Normalize the text content
+            const buttonText = button.textContent.trim().toLowerCase().replace(/\\s+/g, ' ');
+            
+            if (buttonText.includes('view results')) {
+                console.log('The game is complete.');
+                // Send a message back to the app using the correct method
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                return true; // Stop observing once the game is detected as complete
+            }
+        }
+        
+        return false; // Game is not complete yet
+    }
+
+    // Check immediately on load
+    if (!checkGameCompletion()) {
+        // If not complete, create a MutationObserver to monitor changes in the DOM
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (checkGameCompletion()) {
+                observer.disconnect(); // Stop observing if the game is complete
+            }
+        });
+
+        // Start observing the entire document for changes in child elements, subtree, and attributes
+        observer.observe(document.body, {
+            childList: true,   // Monitor changes to child elements
+            subtree: true,     // Monitor the entire subtree
+            characterData: true // Also observe text changes
+        });
+    }
+})();
+"""
+
         default:
             return nil
             
