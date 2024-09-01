@@ -44,7 +44,7 @@ class UserManager: ObservableObject {
                 print("Failed to decode games: \(error)")
             }
         } else {
-            var initialGames: [Game] = GameData().games
+            var initialGames: [Game] = GameData().games.sorted {$0.name < $1.name}
             for i in initialGames.indices {
                 initialGames[i].isDailyGame = true
             }

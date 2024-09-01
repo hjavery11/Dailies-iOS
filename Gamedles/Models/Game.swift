@@ -425,6 +425,87 @@ struct GameData {
     }
 })();
 """
+        case "costcodle":
+            return """
+(function() {
+    function checkForOutcome() {
+        // Get the game-stats div element
+        const gameStatsDiv = document.getElementById('game-stats');
+
+        if (gameStatsDiv) {
+            // Check the text content within the game-stats div
+            const textContent = gameStatsDiv.textContent;
+
+            if (textContent.includes('You win')) {
+                // Send a message back to the app for a win
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                return true;
+            } else if (textContent.includes('Better luck next time')) {
+                // Send a message back to the app for a loss
+                window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+                return true;
+            }
+        }
+        
+        return false; // Outcome is not yet determined
+    }
+
+    // Check immediately on load
+    if (!checkForOutcome()) {
+        // If not complete, create a MutationObserver to monitor changes in the game-stats div
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (checkForOutcome()) {
+                observer.disconnect(); // Stop observing once the outcome is detected
+            }
+        });
+
+        // Start observing the game-stats div for changes
+        const gameStatsDiv = document.getElementById('game-stats');
+        if (gameStatsDiv) {
+            observer.observe(gameStatsDiv, {
+                childList: true,   // Monitor changes to child elements
+                subtree: true,     // Monitor the entire subtree
+                characterData: true // Also observe text changes
+            });
+        }
+    }
+})();
+"""
+        case "box office game":
+            return """
+(function() {
+    function checkForGameOverModal() {
+        // Check if the game over modal is present on the page
+        const gameOverModal = document.querySelector('.ReactModal__Content.GameOverModal');
+        
+        if (gameOverModal) {
+            console.log('Game Over Modal found.');
+            // Send a message back to the app indicating the puzzle is completed
+            window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+            return true; // Stop further checks once the modal is detected
+        }
+        
+        return false; // The game over modal is not yet present
+    }
+
+    // Check immediately on load
+    if (!checkForGameOverModal()) {
+        // If not complete, create a MutationObserver to monitor changes in the DOM
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (checkForGameOverModal()) {
+                observer.disconnect(); // Stop observing once the modal is detected
+            }
+        });
+
+        // Start observing the entire document for changes in child elements, subtree, and attributes
+        observer.observe(document.body, {
+            childList: true,   // Monitor changes to child elements
+            subtree: true,     // Monitor the entire subtree
+            characterData: true // Also observe text changes
+        });
+    }
+})();
+"""
         default:
             return nil
             
