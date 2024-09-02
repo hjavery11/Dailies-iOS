@@ -81,13 +81,7 @@ struct GameData {
              description: "Guess the travel destination between two countries",
              category: "travel",
              background: "travle-bg"),
-        
-        Game(name: "Puckdoku",
-             url: "https://puckdoku.com",
-             description: "Complete the Hockey-themed grid",
-             category: "sports",
-             background: "puckdoku-bg"),
-        
+
         Game(name: "Movie Grid",
              url: "https://moviegrid.io",
              description: "Complete the movie-themed grid",
@@ -603,6 +597,213 @@ struct GameData {
     // Periodically check for URL changes
     setInterval(detectUrlChange, 500);
 
+})();
+"""
+        case "guess the game":
+            return """
+(function() {
+    function checkForOutcome() {
+        const loseMsg = document.querySelector('h2.lose-msg');
+        const winMsg = document.querySelector('h2.win-msg');
+        
+        if (loseMsg) {
+            // Send the message to the iOS app indicating the puzzle failed
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleFailed) {
+                window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+            }
+            observer.disconnect(); // Stop observing after detection
+        } else if (winMsg) {
+            // Send the message to the iOS app indicating the puzzle is completed
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+            }
+            observer.disconnect(); // Stop observing after detection
+        }
+    }
+
+    // Create a MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(checkForOutcome);
+
+    // Start observing the document body for changes
+    observer.observe(document.body, {
+        childList: true,    // Monitor additions and removals of child elements
+        subtree: true,      // Monitor the entire subtree
+        characterData: true // Monitor changes in the text content of nodes
+    });
+
+    // Perform an initial check in case the element is already present
+    checkForOutcome();
+})();
+"""
+        case "movie grid":
+            return """
+(function() {
+    function checkForCompletion() {
+        const paragraphs = document.querySelectorAll('p');
+        const regex = /You got \\d+\\/\\d+ correct/;
+
+        for (let p of paragraphs) {
+            if (regex.test(p.textContent.trim())) {
+                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
+                    window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                }
+                observer.disconnect();
+                break;
+            }
+        }
+    }
+
+    const observer = new MutationObserver(checkForCompletion);
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+
+    checkForCompletion();
+})();
+"""
+        case "movie to movie":
+            return """
+(function() {
+    function checkForScoreboard() {
+        const scoreboard = document.querySelector('div.scoreboard');
+        
+        if (scoreboard) {
+            // Send the message to the iOS app indicating the puzzle is completed
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
+                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+            }
+            observer.disconnect(); // Stop observing after detection
+        }
+    }
+
+    // Create a MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(checkForScoreboard);
+
+    // Start observing the document body for changes
+    observer.observe(document.body, {
+        childList: true,    // Monitor additions and removals of child elements
+        subtree: true,      // Monitor the entire subtree
+        characterData: true // Monitor changes in the text content of nodes
+    });
+
+    // Perform an initial check in case the element is already present
+    checkForScoreboard();
+})();
+"""
+        case "relatle":
+            return """
+(function() {
+    function checkForOutcome() {
+        const paragraphs = document.querySelectorAll('p');
+
+        for (let p of paragraphs) {
+            const text = p.textContent.trim();
+            if (text.includes("You lost")) {
+                // Send the message to the iOS app indicating the puzzle failed
+                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleFailed) {
+                    window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+                }
+                observer.disconnect(); // Stop observing after detection
+                break;
+            } else if (text.includes("You won")) {
+                // Send the message to the iOS app indicating the puzzle is completed
+                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
+                    window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                }
+                observer.disconnect(); // Stop observing after detection
+                break;
+            }
+        }
+    }
+
+    // Create a MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(checkForOutcome);
+
+    // Start observing the document body for changes
+    observer.observe(document.body, {
+        childList: true,    // Monitor additions and removals of child elements
+        subtree: true,      // Monitor the entire subtree
+        characterData: true // Monitor changes in the text content of nodes
+    });
+
+    // Perform an initial check in case the element is already present
+    checkForOutcome();
+})();
+"""
+        case "thrice":
+            return """
+(function() {
+    function checkForCompletion() {
+        const divs = document.querySelectorAll('div');
+
+        for (let div of divs) {
+            const text = div.textContent.trim();
+            if (text === "That's a wrap! Thanks for playing.") {
+                // Send the message to the iOS app indicating the puzzle is completed
+                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
+                    window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                }
+                observer.disconnect(); // Stop observing after detection
+                break;
+            }
+        }
+    }
+
+    // Create a MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(checkForCompletion);
+
+    // Start observing the document body for changes
+    observer.observe(document.body, {
+        childList: true,    // Monitor additions and removals of child elements
+        subtree: true,      // Monitor the entire subtree
+        characterData: true // Monitor changes in the text content of nodes
+    });
+
+    // Perform an initial check in case the element is already present
+    checkForCompletion();
+})();
+"""
+        case "travle":
+            return """
+(function() {
+    function checkForResults() {
+        const resultsDiv = document.getElementById('resultsModalText');
+        
+        if (resultsDiv && resultsDiv.textContent.trim() !== '') {
+            const text = resultsDiv.textContent.trim();
+            if (text.includes("Success")) {
+                // Send the message to the iOS app indicating the puzzle is completed
+                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
+                    window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                }
+            } else {
+                // Send the message to the iOS app indicating the puzzle failed
+                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleFailed) {
+                    window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+                }
+            }
+            observer.disconnect(); // Stop observing after detection
+        }
+    }
+
+    // Create a MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(checkForResults);
+
+    // Start observing the `resultsModalText` div for changes
+    const resultsDiv = document.getElementById('resultsModalText');
+    if (resultsDiv) {
+        observer.observe(resultsDiv, {
+            childList: true,    // Monitor additions and removals of child elements
+            subtree: true,      // Monitor the entire subtree
+            characterData: true // Monitor changes in the text content of nodes
+        });
+    }
+
+    // Perform an initial check in case the element is already populated
+    checkForResults();
 })();
 """
         default:
