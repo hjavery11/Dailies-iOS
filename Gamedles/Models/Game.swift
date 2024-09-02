@@ -76,12 +76,6 @@ struct GameData {
              category: "games",
              background: "guessthegame-bg"),
         
-        Game(name: "Gamedle",
-             url: "https://gamedle.wtf",
-             description: "Guess the game from clues",
-             category: "games",
-             background: "gamedle-bg"),
-        
         Game(name: "Travle",
              url: "https://travle.earth",
              description: "Guess the travel destination between two countries",
@@ -99,12 +93,6 @@ struct GameData {
              description: "Complete the movie-themed grid",
              category: "movies",
              background: "moviegrid-bg"),
-        
-        Game(name: "Spellcheck",
-             url: "https://spellcheckgame.com",
-             description: "Test your spelling skills in this word game",
-             category: "words",
-             background: "spellcheck-bg"),
         
         Game(name: "Food Guessr",
              url: "https://foodguessr.com",

@@ -13,7 +13,6 @@ enum Keys: String {
 }
 
 class UserManager: ObservableObject {
-    
     @Published var games = [Game]() {
         didSet {
             let encoder = JSONEncoder()
@@ -31,6 +30,7 @@ class UserManager: ObservableObject {
     init() {
         //get the daily games from user defaults, or create user defaults if it doesnt exist
         games = getDailyGames()
+        checkResetGames()
     }
     
     func getDailyGames() -> [Game] {
@@ -53,6 +53,30 @@ class UserManager: ObservableObject {
         }
         print("returning empty array for daily games. Shouldnt happen, needs investigation")
         return []
+    }
+    
+    func checkResetGames() {
+        let calendar = Calendar.current
+        
+        if var lastReset = UserDefaults.standard.object(forKey: Keys.lastResetDate.rawValue) as? Date {
+            //uncomment this to test reset
+            //lastReset.addTimeInterval(60 * 60 * 24)
+            let isSameDay = calendar.isDate(lastReset, inSameDayAs: .now)
+            if isSameDay {
+                print("same day of last reset, so dont do anything")
+            } else {
+                print("different day than last reset. Resetting game completions and updating reset date")
+                for g in games.indices {
+                    games[g].completed = false
+                    games[g].won = nil
+                }
+                
+                UserDefaults.standard.setValue(Date(), forKey: Keys.lastResetDate.rawValue)
+            }
+        } else {
+            print("no reset date found in user defaults. Setting it to current time")
+            UserDefaults.standard.setValue(Date(), forKey: Keys.lastResetDate.rawValue)
+        }
     }
     
 }
