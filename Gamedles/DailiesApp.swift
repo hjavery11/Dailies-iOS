@@ -13,7 +13,13 @@ struct DailiesApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TabView {                
+            TabView {  
+                
+                OnboardingView()
+                    .tabItem {
+                        Label("Onboarding", systemImage: "xmark")
+                    }
+                
                 HomeView()
                     .tabItem {
                         Label("Home", systemImage: "calendar")
@@ -23,6 +29,8 @@ struct DailiesApp: App {
                     .tabItem {
                         Label("Games", systemImage: "square.grid.3x3")
                     }
+                
+               
             }
             .environmentObject(userManager)
         }

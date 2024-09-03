@@ -7,11 +7,24 @@
 
 import Foundation
 
+enum Category: String, Codable, CaseIterable, Identifiable {
+    case movies_and_tv = "Movies & TV"
+    case trivia = "Trivia"
+    case music = "Music"
+    case words = "Words"
+    case geography = "Geography"
+    case video_games = "Video Games"
+    case sports = "Sports"
+    case miscellaneous = "Miscellaneous"
+  
+    var id: String {self.rawValue}
+}
+
 struct Game: Hashable, Codable, Identifiable {
     let name: String
     let url: String
     let description: String
-    let category: String
+    let category: Category
     let background: String?
     var completed: Bool = false
     var won: Bool? = nil
@@ -25,113 +38,105 @@ struct GameData {
         Game(name: "Pokedoku",
              url: "https://pokedoku.com",
              description: "Sudoku-style game with Pokémon characters",
-             category: "puzzle",
+             category: .miscellaneous,
              background: "pokedoku-bg"),
         
         Game(name: "Framed",
              url: "https://framed.wtf",
              description: "Guess the movie from a single frame",
-             category: "movies",
+             category: .movies_and_tv,
              background: "framed-bg"),
         
         Game(name: "Daily Dozen Trivia",
              url: "https://dailydozentrivia.com",
              description: "Test your knowledge with 12 daily trivia questions",
-             category: "trivia",
+             category: .trivia,
              background: "dailydozen-bg"),
         
         Game(name: "Connections",
              url: "https://www.nytimes.com/games/connections",
              description: "Group related words together",
-             category: "words",
+             category: .words,
              background: "connections-bg"),
         
         Game(name: "Globle",
              url: "https://globle-game.com",
              description: "Guess the mystery country in this geography challenge",
-             category: "geography",
+             category: .geography,
              background: "globle-bg"),
         
         Game(name: "Box Office Game",
              url: "https://boxofficega.me",
              description: "Guess the movies from a specific box office week",
-             category: "movies",
+             category: .movies_and_tv,
              background: "boxoffice-bg"),
         
         Game(name: "Costcodle",
              url: "https://costcodle.com",
              description: "Guess the cost of Costco items",
-             category: "retail",
+             category: .miscellaneous,
              background: "costcodle-bg"),
         
         Game(name: "Movie to Movie",
              url: "https://movietomovie.com",
              description: "Connect two movies using actors",
-             category: "movies",
+             category: .movies_and_tv,
              background: "movietomovie-bg"),
         
         Game(name: "Guess the Game",
              url: "https://guessthe.game",
              description: "Identify the video game from a single screenshot",
-             category: "games",
+             category: .video_games,
              background: "guessthegame-bg"),
         
         Game(name: "Travle",
              url: "https://travle.earth",
              description: "Guess the travel destination between two countries",
-             category: "travel",
+             category: .geography,
              background: "travle-bg"),
 
         Game(name: "Movie Grid",
              url: "https://moviegrid.io",
              description: "Complete the movie-themed grid",
-             category: "movies",
+             category: .movies_and_tv,
              background: "moviegrid-bg"),
         
         Game(name: "Food Guessr",
              url: "https://foodguessr.com",
              description: "Guess the food item from the clues",
-             category: "food",
+             category: .miscellaneous,
              background: "foodguessr-bg"),
         
         Game(name: "Acted",
              url: "https://acted.wtf",
              description: "Guess the movie based on actors",
-             category: "movies",
+             category: .movies_and_tv,
              background: "acted-bg"),
         
         Game(name: "Thrice",
              url: "https://thrice.geekswhodrink.com",
              description: "Guess the answer within 3 clues",
-             category: "trivia",
+             category: .trivia,
              background: "thrice-bg"),
         
         Game(name: "Relatle",
              url: "https://relatle.io",
              description: "Navigate from one artist to another",
-             category: "words",
+             category: .music,
              background: "relatle-bg"),
         
         Game(name: "Disorderly",
              url: "https://playdisorderly.com",
              description: "Sort the answers in the correct order",
-             category: "puzzle",
+             category: .trivia,
              background: "disorderly-bg"),
         
         Game(name: "Bandle",
              url: "https://bandle.app",
              description: "Guess the song played by the band",
-             category: "music",
+             category: .music,
              background: "bandle-bg")
     ]
-    
-    var gamesByName: [String: Game] {
-        Dictionary(uniqueKeysWithValues: games.map { ($0.name, $0) })
-    }
-    
-    func getGame(forName name: String) -> Game? {
-        gamesByName[name]
-    }
     
     func getJavascript(forGame name: String) -> String? {
         switch name.lowercased() {
