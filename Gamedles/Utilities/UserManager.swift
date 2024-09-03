@@ -13,6 +13,7 @@ enum Keys: String {
 }
 
 class UserManager: ObservableObject {
+    @Published var showOnboarding: Bool = false
     @Published var games = [Game]() {
         didSet {
             let encoder = JSONEncoder()
@@ -39,17 +40,17 @@ class UserManager: ObservableObject {
                 let decoder =  JSONDecoder()
                 // Decode the data into an array of Game objects
                 let games = try decoder.decode([Game].self, from: savedData)
+                let dailyCount = games.filter {$0.isDailyGame}.count
+                if dailyCount == 0 {
+                    showOnboarding = true
+                }
                 return games
             } catch {
                 print("Failed to decode games: \(error)")
             }
         } else {
-            var initialGames: [Game] = GameData().games.sorted {$0.name < $1.name}
-            for i in initialGames.indices {
-                initialGames[i].isDailyGame = true
-            }
-            
-            return initialGames
+           showOnboarding = true
+            return GameData().games
         }
         print("returning empty array for daily games. Shouldnt happen, needs investigation")
         return []
@@ -58,7 +59,7 @@ class UserManager: ObservableObject {
     func checkResetGames() {
         let calendar = Calendar.current
         
-        if var lastReset = UserDefaults.standard.object(forKey: Keys.lastResetDate.rawValue) as? Date {
+        if let lastReset = UserDefaults.standard.object(forKey: Keys.lastResetDate.rawValue) as? Date {
             //uncomment this to test reset
             //lastReset.addTimeInterval(60 * 60 * 24)
             let isSameDay = calendar.isDate(lastReset, inSameDayAs: .now)

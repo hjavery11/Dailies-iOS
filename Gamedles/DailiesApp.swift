@@ -13,12 +13,7 @@ struct DailiesApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TabView {  
-                
-                OnboardingView()
-                    .tabItem {
-                        Label("Onboarding", systemImage: "xmark")
-                    }
+            TabView {
                 
                 HomeView()
                     .tabItem {

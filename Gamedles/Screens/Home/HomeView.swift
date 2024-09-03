@@ -56,7 +56,13 @@ struct HomeView: View {
             .navigationTitle("Daily Games")            
         }
         .fullScreenCover(isPresented: $showGamesList) {
-            GameListView()
+            OnboardingView()
+        }
+        .onAppear {
+            if userManager.showOnboarding{
+                showGamesList = true
+                print("show games list")
+            }
         }
        
     }
