@@ -57,7 +57,7 @@ struct OnboardingView: View {
                                                 
                                                 if game.isDailyGame {
                                                     Image(systemName: "checkmark" )
-                                                        .foregroundStyle(.black)
+                                                        .foregroundStyle(Color(.label))
                                                         .fontWeight(.semibold)
                                                         .font(.title)
                                                         .background(Color.clear)

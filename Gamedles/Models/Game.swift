@@ -28,7 +28,7 @@ struct Game: Hashable, Codable, Identifiable {
     let background: String?
     var completed: Bool = false
     var won: Bool? = nil
-    var isDailyGame: Bool = true
+    var isDailyGame: Bool = false
     var hasScore: Bool
     var score: String?
 

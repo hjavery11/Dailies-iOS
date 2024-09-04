@@ -16,7 +16,7 @@ struct DailiesApp: App {
             TabView {
                 HomeView()
                     .tabItem {
-                        Label("My Games", systemImage: "calendar")
+                        Label("Play", systemImage: "play.square.stack")
                     }
                 
                 HistoryView()

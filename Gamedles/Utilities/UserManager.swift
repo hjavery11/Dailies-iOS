@@ -152,4 +152,8 @@ class UserManager: ObservableObject {
         }
     }
     
+    func deleteHistory(_ date: String) {
+        UserDefaults.standard.removeObject(forKey: Keys.history.rawValue)
+    }
+    
 }

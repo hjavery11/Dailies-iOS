@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HistoryView: View {
     
+    @EnvironmentObject var userManager: UserManager
+    
     @State var gameHistory = [History]()
     @State var dateSelected: Date = .now
     @State var showCalendar: Bool = false
@@ -66,6 +68,13 @@ struct HistoryView: View {
                 }
                 Spacer()
                 .navigationTitle("Score History")
+                .toolbar {
+                    ToolbarItem(placement:.principal) {
+                        Button("Delete History") {
+                            userManager.deleteHistory(dateSelectedID)
+                        }
+                    }
+                }
             }
         }
         .onAppear {
@@ -90,11 +99,9 @@ struct HistoryView: View {
                         showCalendar = false
                 }
         }
-    }
-    
-    private func checkResult(_ game: Game) {
         
     }
+    
 }
 
 #Preview {
