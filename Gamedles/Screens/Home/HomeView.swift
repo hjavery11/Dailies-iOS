@@ -12,48 +12,64 @@ struct HomeView: View {
     @State var showGamesList: Bool = false
     @EnvironmentObject var userManager: UserManager
     
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, MMMM d"
+        return formatter.string(from: Date())
+    }
+    
     var body: some View {
         let columns = [
-            GridItem(.adaptive(minimum: 100))
+            GridItem(.adaptive(minimum: 150))
         ]
         
         NavigationStack {
             VStack {
-                Button {
-                    showGamesList = true
-                } label: {
-                    Text("Add Game")
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: 150)
+                HStack {
+                    Text(formattedDate)
+                        .font(.subheadline)
+                        .fontWeight(.light)
+                    Spacer()
                 }
-                .padding(.horizontal)
-                .background(Color.green)
-                .cornerRadius(8)
-                
-                ScrollView {
-                    LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(userManager.games.filter({ $0.isDailyGame }).indices, id:\.self) { index in
-                            let game = userManager.games.filter({ $0.isDailyGame })[index]
-                            if game.isDailyGame {
-                                ZStack {
-                                    HStack {
-                                        NavigationLink(value: index) {
-                                            GameGridItem2(game: game, size: .small, showCompleted: true)
-                                        }
-                                    }
-                                   
-                                }
+                .padding(.leading, 18)
+            }
+            
+            
+            if userManager.games.filter(\.isDailyGame).count == 0 {
+                VStack {
+                    Spacer()
+                    Text("You have not selected any daily games. Add any games you want to play each day to have them appear here and track your scores.")
+                        .padding()
+                    Spacer()
+                }
+            }
+            
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(userManager.games.filter(\.isDailyGame).indices, id:\.self) { index in
+                        let game = userManager.games.filter(\.isDailyGame)[index]
+                        if game.isDailyGame {
+                            NavigationLink(value: index) {
+                                GameGridItem2(game: game, size: .large, showCompleted: true)
                             }
                         }
                     }
-                    .padding()
                 }
+                .padding()
             }
             .navigationDestination(for: Int.self) { index in
                 WebViewScreen(index: index, dailiesOnly: true)
             }
-            .navigationTitle("Daily Games")            
+            .navigationTitle("Daily Games")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showGamesList = true
+                    } label: {
+                        Image(systemName: "pencil")
+                    }
+                }
+            }
         }
         .fullScreenCover(isPresented: $showGamesList) {
             OnboardingView()
@@ -61,14 +77,25 @@ struct HomeView: View {
         .onAppear {
             if userManager.showOnboarding{
                 showGamesList = true
-                print("show games list")
             }
         }
-       
+        
+        
     }
     
 }
 
-#Preview {
-    HomeView()
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        let userManager = UserManager()
+        userManager.games = GameData().games
+        userManager.games[0].isDailyGame = true
+        userManager.games[1].isDailyGame = true
+        userManager.games[2].isDailyGame = true
+        
+        
+        return HomeView()
+            .environmentObject(userManager)
+    }
+    
 }

@@ -29,7 +29,8 @@ struct Game: Hashable, Codable, Identifiable {
     var completed: Bool = false
     var won: Bool? = nil
     var isDailyGame: Bool = false
-    
+    var hasScore: Bool
+    var score: String?
     var id: String { name }
 }
 
@@ -39,103 +40,120 @@ struct GameData {
              url: "https://pokedoku.com",
              description: "Sudoku-style game with Pokémon characters",
              category: .miscellaneous,
-             background: "pokedoku-bg"),
-        
+             background: "pokedoku-bg",
+             hasScore: true),
+
         Game(name: "Framed",
              url: "https://framed.wtf",
              description: "Guess the movie from a single frame",
              category: .movies_and_tv,
-             background: "framed-bg"),
-        
+             background: "framed-bg",
+             hasScore: false),
+
         Game(name: "Daily Dozen Trivia",
              url: "https://dailydozentrivia.com",
              description: "Test your knowledge with 12 daily trivia questions",
              category: .trivia,
-             background: "dailydozen-bg"),
-        
+             background: "dailydozen-bg",
+             hasScore: true),
+
         Game(name: "Connections",
              url: "https://www.nytimes.com/games/connections",
              description: "Group related words together",
              category: .words,
-             background: "connections-bg"),
-        
+             background: "connections-bg",
+             hasScore: false),
+
         Game(name: "Globle",
              url: "https://globle-game.com",
              description: "Guess the mystery country in this geography challenge",
              category: .geography,
-             background: "globle-bg"),
-        
+             background: "globle-bg",
+             hasScore: false),
+
         Game(name: "Box Office Game",
              url: "https://boxofficega.me",
              description: "Guess the movies from a specific box office week",
              category: .movies_and_tv,
-             background: "boxoffice-bg"),
-        
+             background: "boxoffice-bg",
+             hasScore: false),
+
         Game(name: "Costcodle",
              url: "https://costcodle.com",
              description: "Guess the cost of Costco items",
              category: .miscellaneous,
-             background: "costcodle-bg"),
-        
+             background: "costcodle-bg",
+             hasScore: false),
+
         Game(name: "Movie to Movie",
              url: "https://movietomovie.com",
              description: "Connect two movies using actors",
              category: .movies_and_tv,
-             background: "movietomovie-bg"),
-        
+             background: "movietomovie-bg",
+             hasScore: false),
+
         Game(name: "Guess the Game",
              url: "https://guessthe.game",
              description: "Identify the video game from a single screenshot",
              category: .video_games,
-             background: "guessthegame-bg"),
-        
+             background: "guessthegame-bg",
+             hasScore: false),
+
         Game(name: "Travle",
              url: "https://travle.earth",
              description: "Guess the travel destination between two countries",
              category: .geography,
-             background: "travle-bg"),
+             background: "travle-bg",
+             hasScore: false),
 
         Game(name: "Movie Grid",
              url: "https://moviegrid.io",
              description: "Complete the movie-themed grid",
              category: .movies_and_tv,
-             background: "moviegrid-bg"),
-        
+             background: "moviegrid-bg",
+             hasScore: true),
+
         Game(name: "Food Guessr",
              url: "https://foodguessr.com",
              description: "Guess the food item from the clues",
              category: .miscellaneous,
-             background: "foodguessr-bg"),
-        
+             background: "foodguessr-bg",
+             hasScore: false),
+
         Game(name: "Acted",
              url: "https://acted.wtf",
              description: "Guess the movie based on actors",
              category: .movies_and_tv,
-             background: "acted-bg"),
-        
+             background: "acted-bg",
+             hasScore: false),
+
         Game(name: "Thrice",
              url: "https://thrice.geekswhodrink.com",
              description: "Guess the answer within 3 clues",
              category: .trivia,
-             background: "thrice-bg"),
-        
+             background: "thrice-bg",
+             hasScore: true),
+
         Game(name: "Relatle",
              url: "https://relatle.io",
              description: "Navigate from one artist to another",
              category: .music,
-             background: "relatle-bg"),
-        
+             background: "relatle-bg",
+             hasScore: false),
+
         Game(name: "Disorderly",
              url: "https://playdisorderly.com",
              description: "Sort the answers in the correct order",
              category: .trivia,
-             background: "disorderly-bg"),
-        
+             background: "disorderly-bg",
+             hasScore: false),
+
         Game(name: "Bandle",
              url: "https://bandle.app",
              description: "Guess the song played by the band",
              category: .music,
-             background: "bandle-bg")
+             background: "bandle-bg",
+             hasScore: false)
     ]
     
     func getJavascript(forGame name: String) -> String? {

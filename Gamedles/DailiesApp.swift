@@ -17,12 +17,12 @@ struct DailiesApp: App {
                 
                 HomeView()
                     .tabItem {
-                        Label("Home", systemImage: "calendar")
+                        Label("My Games", systemImage: "calendar")
                     }
                 
                 GamesGridView()
                     .tabItem {
-                        Label("Games", systemImage: "square.grid.3x3")
+                        Label("Catalog", systemImage: "square.grid.3x3")
                     }
                 
                

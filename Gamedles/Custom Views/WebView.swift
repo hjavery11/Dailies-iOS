@@ -54,7 +54,7 @@ struct WebViewScreen: View {
                                         .fontWeight(.semibold)
                                 }
                             }
-                        }
+                        }                       
                         
                     }
             }
