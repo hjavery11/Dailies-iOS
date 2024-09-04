@@ -50,7 +50,7 @@ struct HomeView: View {
                         let game = userManager.games.filter(\.isDailyGame)[index]
                         if game.isDailyGame {
                             NavigationLink(value: index) {
-                                GameGridItem2(game: game, size: .large, showCompleted: true)
+                                GameGridItem2(game: game, size: .large, showCompleted: true, result: nil)
                             }
                         }
                     }
@@ -67,6 +67,13 @@ struct HomeView: View {
                         showGamesList = true
                     } label: {
                         Image(systemName: "pencil")
+                    }
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        userManager.createHistoryForDay(date: .now)
+                    } label: {
+                        Text("Create History")
                     }
                 }
             }

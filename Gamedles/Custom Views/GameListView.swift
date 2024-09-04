@@ -22,7 +22,7 @@ struct GameListView: View {
                     ForEach(userManager.games.indices, id:\.self) { index in
                         let game = userManager.games[index]
                         ZStack {
-                            GameGridItem2(game: game, size: .large, showCompleted: false)
+                            GameGridItem2(game: game, size: .large, showCompleted: false, result: nil)
                                 .padding(.bottom)
                                 .opacity(game.isDailyGame ? 0.5:1)
                                 .onTapGesture {

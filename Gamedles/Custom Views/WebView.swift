@@ -83,6 +83,7 @@ struct WebView: UIViewRepresentable {
             let script = WKUserScript(source: gameJS, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
             contentController.add(context.coordinator, name: "puzzleCompleted")
             contentController.add(context.coordinator, name: "puzzleFailed")
+            contentController.add(context.coordinator, name: "puzzleScore")
             contentController.addUserScript(script)
             print("added javascript to page for completion of game: \(game.name)")
         }
@@ -127,18 +128,21 @@ struct WebView: UIViewRepresentable {
             guard let index = parent.userManager.games.firstIndex(where: {$0 == parent.game}) else {
                 return
             }
-            
-            if message.name == "puzzleCompleted"  {
-                if !parent.userManager.games[index].completed {
+            if !parent.userManager.games[index].completed {
+                if message.name == "puzzleCompleted"  {
                     print("received puzzle success")
                     parent.userManager.games[index].completed = true
                     parent.userManager.games[index].won = true
+                } else if message.name == "puzzleFailed" {
+                    print("received puzzle failed")
+                    parent.userManager.games[index].completed = true
+                    parent.userManager.games[index].won = false
+                } else if message.name == "puzzleScore" {
+                    let score = message.body as? String
+                    parent.userManager.games[index].score = score
+                    parent.userManager.games[index].completed = true
+                    print("puzzle score recieved of \(score ?? "NaN")")
                 }
-            
-            } else if message.name == "puzzleFailed" {
-                print("received puzzle failed")
-                parent.userManager.games[index].completed = true
-                parent.userManager.games[index].won = false
             }
         }
         

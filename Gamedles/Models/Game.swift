@@ -28,9 +28,10 @@ struct Game: Hashable, Codable, Identifiable {
     let background: String?
     var completed: Bool = false
     var won: Bool? = nil
-    var isDailyGame: Bool = false
+    var isDailyGame: Bool = true
     var hasScore: Bool
     var score: String?
+
     var id: String { name }
 }
 
@@ -264,56 +265,59 @@ struct GameData {
         case "pokedoku":
             return """
 (function() {
-    let lastInvocationTime = 0;
-    const throttleDelay = 200; // 200 ms throttle delay
-
-    // Function to check for success or failure within the targeted modal areas
-    function checkPuzzleStatus(observer) {
-        const modalSections = document.querySelectorAll('section.chakra-modal__content');
+    function checkForGameOver() {
+        const paragraphs = document.querySelectorAll('p');
         
-        modalSections.forEach(section => {
-            const textContent = section.textContent;
+        // Iterate through the paragraphs to find the game over message
+        for (let p of paragraphs) {
+            if (p.textContent.includes('You have run out of guesses!')) {
+                console.log('Game over detected.');
+                
+                // Now find the score
+                const h2Elements = document.querySelectorAll('h2');
+                
+                for (let i = 0; i < h2Elements.length; i++) {
+                    if (h2Elements[i].textContent.trim() === 'PTS') {
+                        // Check if there's an h2 element after the one with 'PTS'
+                        if (h2Elements[i + 1]) {
+                            const score = h2Elements[i + 1].textContent.trim();
+                            console.log('Score found:', score);
+                            
+                            // Format the score as "{score}/9"
+                            const formattedScore = `${score}/9`;
+                            console.log('Formatted Score:', formattedScore);
 
-            if (textContent.includes('Congrats! You solved them all!')) {
-                // Notify the native code that the puzzle is completed successfully
-                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                            // Send the formatted score to the app
+                            window.webkit.messageHandlers.puzzleScore.postMessage(formattedScore);
+                            break;
+                        }
+                    }
+                }
                 
-                // Disconnect the MutationObserver to stop further checks
-                observer.disconnect();
-            } else if (textContent.includes('You have run out of guesses')) {
-                // Notify the native code that the puzzle failed
-                window.webkit.messageHandlers.puzzleFailed.postMessage(true);
-                
-                // Disconnect the MutationObserver to stop further checks
-                observer.disconnect();
+                observer.disconnect(); // Stop observing after the game is over
+                return true; // Stop further checks
             }
-        });
-    }
-
-    // Throttled mutation handler
-    function throttledMutationHandler(mutationsList, observer) {
-        const now = Date.now();
-
-        // Check if sufficient time has passed since the last invocation
-        if (now - lastInvocationTime > throttleDelay) {
-            checkPuzzleStatus(observer);
-            lastInvocationTime = now;
         }
+        
+        return false; // Game is not over yet
     }
 
-    // Use MutationObserver to watch for changes in the DOM specifically within the modal sections
-    const observer = new MutationObserver(throttledMutationHandler);
+    // MutationObserver to monitor changes in the DOM
+    const observer = new MutationObserver((mutationsList, observer) => {
+        if (checkForGameOver()) {
+            observer.disconnect();
+        }
+    });
 
-    // Start observing the body but target only modal sections for changes
+    // Start observing the document for changes
     observer.observe(document.body, {
         childList: true,
         subtree: true,
-        characterData: true,
-        attributes: false
+        characterData: true
     });
 
-    // Initial check in case the text is already present
-    checkPuzzleStatus(observer);
+    // Initial check in case the game over message is already present
+    checkForGameOver();
 })();
 """
         case "bandle":
@@ -352,32 +356,34 @@ struct GameData {
         case "daily dozen trivia":
             return """
 (function() {
-    function checkGameCompletion() {
-        // Select all buttons on the page
-        const buttons = document.querySelectorAll('button');
+    function checkForScoreElement() {
+        // Find the h6 element with class "text-correctNumber"
+        const scoreElement = document.querySelector('h6.text-correctNumber');
         
-        // Iterate through the buttons to find one with the text "view results"
-        for (let button of buttons) {
-            // Normalize the text content
-            const buttonText = button.textContent.trim().toLowerCase().replace(/\\s+/g, ' ');
-            
-            if (buttonText.includes('view results')) {
-                console.log('The game is complete.');
-                // Send a message back to the app using the correct method
-                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
-                return true; // Stop observing once the game is detected as complete
-            }
+        if (scoreElement) {
+            console.log('Score element detected.');
+
+            // Extract the number from the h6 element
+            let score = scoreElement.textContent.trim();
+
+            // Format the score as "{score}/9"
+            const formattedScore = `${score}/9`;
+
+            // Send a message back to the app with the formatted score
+            window.webkit.messageHandlers.puzzleScore.postMessage(formattedScore);
+
+            return true; // Stop observing once the score is detected
         }
         
-        return false; // Game is not complete yet
+        return false; // The score element is not found yet
     }
 
     // Check immediately on load
-    if (!checkGameCompletion()) {
-        // If not complete, create a MutationObserver to monitor changes in the DOM
+    if (!checkForScoreElement()) {
+        // If the score element is not found, create a MutationObserver to monitor changes in the DOM
         const observer = new MutationObserver((mutationsList, observer) => {
-            if (checkGameCompletion()) {
-                observer.disconnect(); // Stop observing if the game is complete
+            if (checkForScoreElement()) {
+                observer.disconnect(); // Stop observing once the score is detected
             }
         });
 
@@ -667,10 +673,22 @@ struct GameData {
 
         for (let p of paragraphs) {
             if (regex.test(p.textContent.trim())) {
-                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.puzzleCompleted) {
-                    window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
-                }
-                observer.disconnect();
+                // Delay checking the score by 1 second to allow the page to update
+                setTimeout(() => {
+                    const updatedMatch = p.textContent.trim().match(/You got (\\d+)\\/\\d+ correct/);
+                    if (updatedMatch) {
+                        const correctAnswers = updatedMatch[1];
+                        const formattedScore = `${correctAnswers}/9`;
+
+                        if (window.webkit && window.webkit.messageHandlers) {
+                            if (window.webkit.messageHandlers.puzzleScore) {
+                                window.webkit.messageHandlers.puzzleScore.postMessage(formattedScore);
+                            }
+                        }
+                    }
+                    observer.disconnect(); // Stop observing once the completion is detected
+                }, 2000); // 1 second delay before checking the score
+
                 break;
             }
         }

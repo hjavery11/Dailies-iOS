@@ -14,18 +14,20 @@ struct DailiesApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                
                 HomeView()
                     .tabItem {
                         Label("My Games", systemImage: "calendar")
+                    }
+                
+                HistoryView()
+                    .tabItem {
+                        Label("History", systemImage: "list.bullet.circle")
                     }
                 
                 GamesGridView()
                     .tabItem {
                         Label("Catalog", systemImage: "square.grid.3x3")
                     }
-                
-               
             }
             .environmentObject(userManager)
         }

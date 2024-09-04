@@ -26,7 +26,7 @@ struct GamesGridView: View {
                     ForEach(userManager.games.indices, id:\.self) { index in
                         let game = userManager.games[index]
                         NavigationLink(value: index) {
-                            GameGridItem2(game: game, size: .large, showCompleted: false)
+                            GameGridItem2(game: game, size: .large, showCompleted: false, result: nil)
                         }
                         .padding(.bottom)
                     }
