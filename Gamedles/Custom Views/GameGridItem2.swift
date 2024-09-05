@@ -67,7 +67,7 @@ struct GameGridItem2: View {
                 if game.hasScore {
                     Text(result)
                         .bold()
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.teal)
                         .fontWeight(.semibold)
                         .font(.title)
                         .background(Color.clear)
@@ -94,7 +94,7 @@ struct GameGridItem2: View {
                     if let score = game.score {
                         Text(score)
                             .bold()
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.teal)
                             .fontWeight(.semibold)
                             .font(.title)
                             .background(Color.clear)

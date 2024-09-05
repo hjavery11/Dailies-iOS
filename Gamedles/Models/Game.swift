@@ -311,9 +311,14 @@ struct GameData {
 
     // MutationObserver to monitor changes in the DOM
     const observer = new MutationObserver((mutationsList, observer) => {
-        if (checkForGameOver()) {
-            observer.disconnect();
-        }
+        mutationsList.forEach(mutation => {
+            // Skip any mutations inside iframes
+            if (!mutation.target.closest('iframe')) {
+                if (checkForGameOver()) {
+                    observer.disconnect();
+                }
+            }
+        });
     });
 
     // Start observing the document for changes
@@ -364,7 +369,7 @@ struct GameData {
             return """
 (function() {
     function checkForScoreElement() {
-        // Find the h6 element with class "text-correctNumber"
+        // Look for the h6 element with the class "text-correctNumber" anywhere in the document
         const scoreElement = document.querySelector('h6.text-correctNumber');
         
         if (scoreElement) {
@@ -389,6 +394,13 @@ struct GameData {
     if (!checkForScoreElement()) {
         // If the score element is not found, create a MutationObserver to monitor changes in the DOM
         const observer = new MutationObserver((mutationsList, observer) => {
+            // Skip any mutations inside iframes
+            mutationsList.forEach(mutation => {
+                if (!mutation.target.closest('iframe')) {  // Skip if the target is within an iframe
+                    checkForScoreElement();
+                }
+            });
+
             if (checkForScoreElement()) {
                 observer.disconnect(); // Stop observing once the score is detected
             }
