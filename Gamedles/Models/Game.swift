@@ -854,6 +854,57 @@ struct GameData {
     checkForResults();
 })();
 """
+        case "puckdoku":
+            return """
+(function() {
+    function checkForCompletion() {
+        // Find all div elements
+        const divs = document.querySelectorAll('div');
+        const regex = /No shots left/;  // Example logic to detect game over
+
+        for (let div of divs) {
+            if (regex.test(div.textContent.trim())) {
+                // Game over detected
+                console.log("Game over detected!");
+
+                // Now find the score in the format {number_correct} / 9
+                const scoreDiv = Array.from(divs).find(div => /(\\d+) \\/ 9/.test(div.textContent.trim()));
+                if (scoreDiv) {
+                    const scoreMatch = scoreDiv.textContent.match(/(\\d+) \\/ 9/);
+                    if (scoreMatch) {
+                        const score = scoreMatch[1];
+                        console.log(`Score: ${score}`);
+                        window.webkit.messageHandlers.puzzleScore.postMessage(`${score}\\/9`);
+                    }
+                }
+
+                observer.disconnect(); // Stop observing once the game is over
+                return;
+            }
+        }
+    }
+
+    const observer = new MutationObserver(function(mutationsList, observer) {
+        for (const mutation of mutationsList) {
+            // Skip any mutations involving elements with "ad" in their ID
+            if (mutation.target.id && mutation.target.id.toLowerCase().includes('ad')) {
+                console.log("Skipping ad element");
+                continue; // Skip this mutation, it relates to an ad
+            }
+
+            checkForCompletion(); // Call your completion check logic if it's not an ad
+        }
+    });
+
+    // Start observing the body or a specific part of the DOM
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+
+})();
+"""
         default:
             return nil
             
