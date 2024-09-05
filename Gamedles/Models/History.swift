@@ -9,7 +9,7 @@ import Foundation
 
 struct History: Codable, Identifiable {
     let date: String
-    let scores: [String: String]
+    var scores: [String: String]
     
     var id: String { return date }
 }

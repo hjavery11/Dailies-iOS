@@ -200,7 +200,7 @@
 					};
 				};
 			};
-			buildConfigurationList = FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Gamedles" */;
+			buildConfigurationList = FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Dailies" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -389,6 +389,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = PlayDaily;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -425,6 +426,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = PlayDaily;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -451,7 +453,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Gamedles" */ = {
+		FA99A39B2C7CF91D00D382F5 /* Build configuration list for PBXProject "Dailies" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FA99A3AC2C7CF91D00D382F5 /* Debug */,

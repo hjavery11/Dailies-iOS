@@ -20,38 +20,38 @@ struct HistoryView: View {
         let sortedHistoryDictionary =  formattedDateDictionary.sorted { $0.key > $1.key }
         let columns = [
             GridItem(.adaptive(minimum: 100))
-        ]
+        ]        
+       
         
         NavigationStack {
-            VStack(spacing:16) {
-                HStack {
-                    Image(systemName: "chevron.left")
-                        .imageScale(.medium)
-                        .foregroundStyle(.blue)
-                        .onTapGesture {
-                            goToPreviousHistory()
-                        }
-                        .opacity(currentIndex == formattedDateDictionary.count - 1 ? 0:1)
-                       
-                    
-                    if !isLoading {
-                        Text(sortedHistoryDictionary[currentIndex].key, format: Date.FormatStyle().weekday(.wide).month(.wide).day())
-                            .font(.subheadline)
-                            .fontWeight(.light)
+            HStack {
+                Image(systemName: "chevron.left")
+                    .imageScale(.medium)
+                    .foregroundStyle(.blue)
+                    .onTapGesture {
+                        goToPreviousHistory()
                     }
-                    
-                    Image(systemName: "chevron.right")
-                        .imageScale(.medium)
-                        .foregroundStyle(.blue)
-                        .onTapGesture {
-                            goToNextHistory()
-                        }
-                        .opacity(currentIndex == 0 ? 0:1)
-                    
-                    Spacer()
-                }
-                .padding(.leading, 18)
+                    .opacity(currentIndex == formattedDateDictionary.count - 1 ? 0:1)
+                   
                 
+                if !isLoading {
+                    Text(sortedHistoryDictionary[currentIndex].key, format: Date.FormatStyle().weekday(.wide).month(.wide).day())
+                        .font(.subheadline)
+                        .fontWeight(.light)
+                }
+                
+                Image(systemName: "chevron.right")
+                    .imageScale(.medium)
+                    .foregroundStyle(.blue)
+                    .onTapGesture {
+                        goToNextHistory()
+                    }
+                    .opacity(currentIndex == 0 ? 0:1)
+                
+                Spacer()
+            }
+            .padding(.leading, 18)
+            VStack(spacing:16) {
                 if !isLoading {
                     LazyVGrid(columns: columns, spacing: 16) {
                         let historyForDaySelected = sortedHistoryDictionary[currentIndex].value
@@ -66,6 +66,7 @@ struct HistoryView: View {
                 Spacer()
                 .navigationTitle("Score History")
             }
+            .padding()
         }
         .onAppear {
             var gameHistory = [History]()

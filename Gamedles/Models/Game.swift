@@ -154,7 +154,14 @@ struct GameData {
              description: "Guess the song played by the band",
              category: .music,
              background: "bandle-bg",
-             hasScore: false)
+             hasScore: false),
+        
+        Game(name: "Puckdoku",
+             url: "https://www.puckdoku.com/",
+             description: "Guess NHL players based on team, season, and stats.",
+             category: .sports,
+             background: "puckdoku-bg",
+             hasScore: true),
     ]
     
     func getJavascript(forGame name: String) -> String? {

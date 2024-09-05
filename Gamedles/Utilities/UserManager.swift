@@ -32,29 +32,79 @@ class UserManager: ObservableObject {
     init() {
         //get the daily games from user defaults, or create user defaults if it doesnt exist
         games = getDailyGames()
+        cleanUpHistory()
         checkResetGames()
     }
     
     func getDailyGames() -> [Game] {
         if let savedData = UserDefaults.standard.data(forKey: Keys.dailies.rawValue) {
             do {
-                let decoder =  JSONDecoder()
+                let decoder = JSONDecoder()
                 // Decode the data into an array of Game objects
-                let games = try decoder.decode([Game].self, from: savedData)
-                let dailyCount = games.filter {$0.isDailyGame}.count
+                var savedGames = try decoder.decode([Game].self, from: savedData)
+                let dailyCount = savedGames.filter { $0.isDailyGame }.count
                 if dailyCount == 0 {
                     showOnboarding = true
                 }
-                return games
+                
+                // Check for new games and add them
+                let newGames = getNewGames(savedGames: savedGames)
+                if !newGames.isEmpty {
+                    savedGames.append(contentsOf: newGames)
+                    print("Added new games: \(newGames.map { $0.name })")
+                }
+                
+                // Check for deleted games and remove them
+                let deletedGames = getDeletedGames(savedGames: savedGames)
+                if !deletedGames.isEmpty {
+                    savedGames.removeAll { game in deletedGames.contains { $0.name == game.name } }
+                    print("Removed deleted games: \(deletedGames.map { $0.name })")
+                }
+                
+                // Save the updated games list to UserDefaults if there are any changes
+                if !newGames.isEmpty || !deletedGames.isEmpty {
+                    saveGamesToUserDefaults(games: savedGames)
+                }
+                
+                return savedGames
             } catch {
                 print("Failed to decode games: \(error)")
             }
         } else {
+            // If no saved data, show onboarding and return the default games
             showOnboarding = true
             return GameData().games
         }
-        print("returning empty array for daily games. Shouldnt happen, needs investigation")
+        
+        print("Returning empty array for daily games. Shouldn't happen, needs investigation.")
         return []
+    }
+
+    
+    // Helper function to find new games not in saved data
+    func getNewGames(savedGames: [Game]) -> [Game] {
+        return GameData().games.filter { newGame in
+            !savedGames.contains { savedGame in savedGame.name == newGame.name }
+        }
+    }
+
+    // Helper function to find games that no longer exist in GameData
+    func getDeletedGames(savedGames: [Game]) -> [Game] {
+        return savedGames.filter { savedGame in
+            !GameData().games.contains { game in game.name == savedGame.name }
+        }
+    }
+
+    // Helper function to save games to UserDefaults
+    func saveGamesToUserDefaults(games: [Game]) {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(games)
+            UserDefaults.standard.setValue(data, forKey: Keys.dailies.rawValue)
+            print("Saved updated games list to UserDefaults.")
+        } catch {
+            print("Failed to encode updated games list.")
+        }
     }
     
     func checkResetGames() {
@@ -154,6 +204,31 @@ class UserManager: ObservableObject {
     
     func deleteHistory(_ date: String) {
         UserDefaults.standard.removeObject(forKey: Keys.history.rawValue)
+    }
+    
+    func cleanUpHistory() {
+        // Load history from UserDefaults
+        if let oldHistoryData = UserDefaults.standard.data(forKey: Keys.history.rawValue) {
+            do {
+                var oldHistory = try JSONDecoder().decode([History].self, from: oldHistoryData)
+                let gameDataGames = GameData().games
+                
+                // Iterate through each history entry and remove references to deleted games
+                for index in oldHistory.indices {
+                    oldHistory[index].scores = oldHistory[index].scores.filter { gameID, _ in
+                        gameDataGames.contains { $0.id == gameID }
+                    }
+                }
+                
+                // Save the cleaned-up history back to UserDefaults
+                let encoder = JSONEncoder()
+                let data = try encoder.encode(oldHistory)
+                UserDefaults.standard.setValue(data, forKey: Keys.history.rawValue)
+                print("Cleaned up history references to deleted games")
+            } catch {
+                print("Failed to clean up history: \(error)")
+            }
+        }
     }
     
 }
