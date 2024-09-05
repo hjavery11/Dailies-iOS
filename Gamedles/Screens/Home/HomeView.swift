@@ -23,6 +23,8 @@ struct HomeView: View {
             GridItem(.adaptive(minimum: 150))
         ]
         
+        let dailyGames = userManager.games.filter(\.isDailyGame).sorted(by: { $0.name < $1.name })
+        
         NavigationStack {
             VStack {
                 HStack {
@@ -46,8 +48,8 @@ struct HomeView: View {
             
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(userManager.games.filter(\.isDailyGame).indices, id:\.self) { index in
-                        let game = userManager.games.filter(\.isDailyGame)[index]
+                    ForEach(dailyGames.indices, id:\.self) { index in
+                        let game = dailyGames[index]
                         if game.isDailyGame {
                             NavigationLink(value: index) {
                                 GameGridItem2(game: game, size: .large, showCompleted: true, result: nil)
@@ -67,13 +69,6 @@ struct HomeView: View {
                         showGamesList = true
                     } label: {
                         Image(systemName: "pencil")
-                    }
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        userManager.createHistoryForDay(date: .now)
-                    } label: {
-                        Text("Create History")
                     }
                 }
             }

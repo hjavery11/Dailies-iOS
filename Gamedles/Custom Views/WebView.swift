@@ -16,7 +16,7 @@ struct WebViewScreen: View {
     var body: some View {
         var game: Game {
             if dailiesOnly {
-                return userManager.games.filter( { $0.isDailyGame })[index]
+                return  userManager.games.filter(\.isDailyGame).sorted(by: { $0.name < $1.name })[index]
             } else {
                 return userManager.games[index]
             }
@@ -53,6 +53,7 @@ struct WebViewScreen: View {
                                         .font(.callout)
                                         .fontWeight(.semibold)
                                 }
+                                .opacity(userManager.games.filter(\.isDailyGame).count > 1 ? 1:0)
                             }
                         }                       
                         
