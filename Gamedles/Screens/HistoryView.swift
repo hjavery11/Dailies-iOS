@@ -11,28 +11,13 @@ struct HistoryView: View {
     
     @EnvironmentObject var userManager: UserManager
     
-    @State var gameHistory = [History]()
     @State var dateSelected: Date = .now
-    @State var showCalendar: Bool = false
-    @State var calendarId: UUID = UUID()
-    
-    var dateSelectedID: String {
-        let historyDateComponents = dateSelected.get(.day, .month, .year)
-        
-        if let day = historyDateComponents.day, let month = historyDateComponents.month, let year = historyDateComponents.year {
-            let historyDateFormatted = "\(day), \(month), \(year)"
-            return historyDateFormatted
-        }
-        return ""
-    }
-    
-    private var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMMM d"
-        return formatter.string(from: dateSelected)
-    }
+    @State var formattedDateDictionary = [Date: History]()
+    @State var isLoading = true
+    @State var currentIndex: Int = 0
     
     var body: some View {
+        let sortedHistoryDictionary =  formattedDateDictionary.sorted { $0.key > $1.key }
         let columns = [
             GridItem(.adaptive(minimum: 100))
         ]
@@ -40,44 +25,53 @@ struct HistoryView: View {
         NavigationStack {
             VStack(spacing:16) {
                 HStack {
-                    Text(formattedDate)
-                        .font(.subheadline)
-                        .fontWeight(.light)
+                    Image(systemName: "chevron.left")
+                        .imageScale(.medium)
+                        .foregroundStyle(.blue)
+                        .onTapGesture {
+                            goToPreviousHistory()
+                        }
+                        .opacity(currentIndex == formattedDateDictionary.count - 1 ? 0:1)
+                       
                     
-                    Button {
-                        showCalendar = true
-                    } label: {
-                        Image(systemName: "calendar")
+                    if !isLoading {
+                        Text(sortedHistoryDictionary[currentIndex].key, format: Date.FormatStyle().weekday(.wide).month(.wide).day())
+                            .font(.subheadline)
+                            .fontWeight(.light)
                     }
+                    
+                    Image(systemName: "chevron.right")
+                        .imageScale(.medium)
+                        .foregroundStyle(.blue)
+                        .onTapGesture {
+                            goToNextHistory()
+                        }
+                        .opacity(currentIndex == 0 ? 0:1)
+                    
                     Spacer()
                 }
                 .padding(.leading, 18)
-                LazyVGrid(columns: columns, spacing: 16) {
-                    let historyForDaySelected = gameHistory.filter {$0.date == dateSelectedID}.first
-                    if let history = historyForDaySelected {
-                        ForEach(history.scores.sorted(by: {$0.key < $1.key}), id:\.key) { gameID, result in
+                
+                if !isLoading {
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        let historyForDaySelected = sortedHistoryDictionary[currentIndex].value
+                        ForEach(historyForDaySelected.scores.sorted(by: {$0.key < $1.key}), id:\.key) { gameID, result in
                             if let originalGame = GameData().games.first(where: { $0.name == gameID }) {
                                 GameGridItem2(game: originalGame, size: .small, showCompleted: true, result: result)
                             }
                             
                         }
-                    } else {
-                        Text("No history found for this date")
-                            .font(.subheadline)
                     }
                 }
                 Spacer()
                 .navigationTitle("Score History")
-                .toolbar {
-                    ToolbarItem(placement:.principal) {
-                        Button("Delete History") {
-                            userManager.deleteHistory(dateSelectedID)
-                        }
-                    }
-                }
             }
         }
         .onAppear {
+            var gameHistory = [History]()
+            #if targetEnvironment(simulator)
+            gameHistory = HistoryData().mockData
+            #else
             if let data = UserDefaults.standard.data(forKey: Keys.history.rawValue) {
                 let decoder = JSONDecoder()
                 do {
@@ -89,17 +83,51 @@ struct HistoryView: View {
             } else {
                 print("No history data found")
             }
-        }
-        .sheet(isPresented: $showCalendar) {
-            DatePicker("Start Date", selection:$dateSelected, displayedComponents: [.date])
-                .datePickerStyle(.graphical)
-                .labelsHidden()
-                .id(calendarId)
-                .onChange(of: dateSelected) { _ in
-                        showCalendar = false
-                }
+            #endif
+            //set date to latest available with history
+            convertDates(gameHistory)
+            isLoading = false
         }
         
+    }
+    
+    func convertDates(_ gameHistory:[History]) {
+        let calendar = Calendar.current
+        for history in gameHistory {
+            let dateString = history.date
+            let dateComponents = dateString.components(separatedBy: ", ").compactMap {Int($0)}
+            if dateComponents.count == 3 {
+                let day = dateComponents[0]
+                let month = dateComponents[1]
+                let year = dateComponents[2]
+                
+                var components = DateComponents()
+                components.day = day
+                components.month = month
+                components.year = year
+                
+                if let date = calendar.date(from: components) {
+                    formattedDateDictionary.updateValue(history, forKey: date)
+                } else {
+                    print("Invalid date")
+                }
+            } else {
+                print("Invalid date format")
+            }
+        }
+    }
+    
+    func goToPreviousHistory() {
+        //because of sort order, we go up an index to go back in time
+        if currentIndex + 1 < formattedDateDictionary.count {
+            currentIndex += 1
+        }
+    }
+    
+    func goToNextHistory() {
+        if currentIndex - 1 >= 0 {
+            currentIndex -= 1
+        }
     }
     
 }
