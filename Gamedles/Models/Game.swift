@@ -162,6 +162,13 @@ struct GameData {
              category: .sports,
              background: "puckdoku-bg",
              hasScore: true),
+        
+        Game(name: "Wordle",
+             url: "https://www.nytimes.com/games/wordle/index.html",
+             description: "Get 6 chances to guess a 5-letter word",
+             category: .words,
+             background: "wordle-bg",
+             hasScore: false)
     ]
     
     func getJavascript(forGame name: String) -> String? {
@@ -616,6 +623,57 @@ struct GameData {
     }
 })();
 """
+        case "wordle":
+            return """
+            (function() {
+                function checkForOutcome() {
+                    // Select the dialog with data-testid="modal-overlay"
+                    const dialog = document.querySelector('dialog[data-testid="modal-overlay"]');
+
+                    if (dialog) {
+                        console.log('Dialog detected.');
+
+                        // Look for the h1 element inside the dialog
+                        const h1Element = dialog.querySelector('h1');
+
+                        if (h1Element) {
+                            const outcomeText = h1Element.textContent.trim();
+
+                            if (outcomeText === "Congratulations!") {
+                                // It's a win, send the win message
+                                console.log('Win detected.');
+                                window.webkit.messageHandlers.puzzleCompleted.postMessage(true);
+                            } else if (outcomeText === "Thanks for playing today!") {
+                                // It's a loss, send the loss message
+                                console.log('Loss detected.');
+                                window.webkit.messageHandlers.puzzleFailed.postMessage(true);
+                            }
+                            observer.disconnect(); // Stop observing after outcome is found
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                // Check immediately on load
+                if (!checkForOutcome()) {
+                    // Create a MutationObserver to watch for changes in the DOM
+                    const observer = new MutationObserver((mutationsList, observer) => {
+                        if (checkForOutcome()) {
+                            observer.disconnect(); // Stop observing once the outcome is detected
+                        }
+                    });
+
+                    // Start observing the document
+                    observer.observe(document.body, {
+                        childList: true,   // Monitor changes to child elements
+                        subtree: true,     // Monitor the entire subtree
+                        characterData: true // Observe text changes
+                    });
+                }
+            })();
+            """
+            
         case "food guessr":
             return """
 (function() {

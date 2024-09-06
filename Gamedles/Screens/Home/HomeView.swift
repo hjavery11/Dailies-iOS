@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.scenePhase) var scenePhase
     
     @State var showGamesList: Bool = false
     @EnvironmentObject var userManager: UserManager
@@ -81,6 +82,12 @@ struct HomeView: View {
                 showGamesList = true
             }
         }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                userManager.checkResetGames()
+            }
+        }
+        
         
         
     }
